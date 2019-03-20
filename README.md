@@ -2,7 +2,6 @@
 
 [![NPM version](http://img.shields.io/npm/v/removd.svg)](https://npmjs.org/package/removd)
 [![Downloads](http://img.shields.io/npm/dm/removd.svg)](https://npmjs.org/package/removd)
-[![CircleCI](https://circleci.com/gh/przemyslawpluta/removd/tree/master.svg?style=svg)](https://circleci.com/gh/przemyslawpluta/removd/tree/master)
 
 Automatic ai cut outs with [remove.bg](https://www.remove.bg) service
 
