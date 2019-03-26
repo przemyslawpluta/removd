@@ -1,7 +1,7 @@
 {
   "name": "removd",
-  "version": "1.0.0",
-  "description": "automatic ai cut outs with remove.bg service",
+  "version": "1.0.1",
+  "description": "automatic ai cut outs with remove.bg service for people and products",
   "main": "removd.js",
   "scripts": {
     "test": "mocha --timeout 0 tests/*",
@@ -32,13 +32,14 @@
   "homepage": "https://github.com/przemyslawpluta/removd",
   "keywords": [
     "remove.bg",
-    "remove image background",
-    "background image",
-    "remove background",
+    "remove background image",
     "image processing",
     "automated",
     "persons",
+    "people",
+    "products",
     "cut out",
+    "body",
     "face",
     "ai",
     "base64",
