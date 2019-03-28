@@ -80,8 +80,8 @@ Response `done (object)` will be similar to:
 ```js
 await removd.file({
     deleteOriginal: true,
-    channels: "alpha",
-    detect: "person",
+    channels: 'alpha',
+    detect: 'person',
     destination: '/new-directory/christopher-campbell.png',
     source: [
         '/directory/christopher-campbell-28567-unsplash-400x267.jpg',
@@ -214,7 +214,7 @@ Response `done (object)` will be similar to:
 
 ```js
 await removd.url({
-    detect: "person",
+    detect: 'person',
     destination: '/new-directory/',
     source: [
         'https://images.unsplash.com/photo-1504455583697-3a9b04be6397?w=400&q=80',
