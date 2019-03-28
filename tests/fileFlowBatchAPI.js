@@ -44,7 +44,7 @@ describe('# service batch API file workflow test', () => {
         it('should return no persons found error for one of the images', () => {
 
             expect(out).to.deep.equal({
-                error: 'No persons found: At the moment remove.bg only works for photos with at least one person in them. Sorry – please select an appropriate image.',
+                error: 'Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.',
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 
@@ -54,21 +54,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -127,21 +130,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'auto'
             });
 
@@ -174,21 +180,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
+                detected: 'person',
                 size: 'auto'
             });
 
@@ -221,21 +230,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
+                detected: 'person',
                 size: 'auto'
             });
 
@@ -268,21 +280,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
+                detected: 'person',
                 size: 'auto'
             });
 
@@ -340,7 +355,7 @@ describe('# service batch API file workflow test', () => {
         it('should return no persons found error for one of the images', () => {
 
             expect(out).to.deep.equal({
-                error: 'No persons found: At the moment remove.bg only works for photos with at least one person in them. Sorry – please select an appropriate image.',
+                error: 'Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.',
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 
@@ -350,21 +365,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_LQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -397,21 +415,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_LQ}-tag.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -444,21 +465,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_MQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
+                detected: 'person',
                 size: 'medium'
             });
 
@@ -491,21 +515,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_HQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
+                detected: 'person',
                 size: 'hd'
             });
 
@@ -538,21 +565,24 @@ describe('# service batch API file workflow test', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_UHD}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = success;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
+                detected: 'person',
                 size: '4k'
             });
 

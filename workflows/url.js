@@ -52,14 +52,31 @@ async function urlWorkflow(options) {
         };
     }
 
-    if (options.size && !common.supportedSizes(options.size)) {
-        return {
-            error: 'Unsupported size'
-        };
+    let original = null;
+
+    const formData = {
+        image_url: url.href,
+        channels: 'rgba',
+        type: 'auto'
+    };
+
+    const size = common.support(formData, options, 'size');
+
+    if (size.error) {
+        return size;
     }
 
+    const channels = common.support(formData, options, 'channels');
 
-    let original = null;
+    if (channels.error) {
+        return channels;
+    }
+
+    const detect = common.support(formData, options, 'detect');
+
+    if (detect.error) {
+        return detect;
+    }
 
     const dim = await common.getDimensionsUrl(options.source);
 
@@ -69,13 +86,8 @@ async function urlWorkflow(options) {
 
     original = [dim.width, dim.height];
 
-    const formData = {
-        image_url: url.href,
-        size: dim.size
-    };
-
-    if (options.size && common.supportedSizes(options.size) && formData.size !== options.size) {
-        formData.size = options.size;
+    if (!formData.size) {
+        formData.size = dim.size;
     }
 
     const cutOutName = file.name;

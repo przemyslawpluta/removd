@@ -4,6 +4,7 @@ const removd = require('../removd');
 
     const done = await removd.file({
         size: 'auto',
+        detect: 'person',
         destination: '/outcome/',
         source: [
             '/directory/christopher-campbell-28567-unsplash-400x267.jpg',

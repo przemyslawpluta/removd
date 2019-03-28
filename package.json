@@ -1,7 +1,7 @@
 {
   "name": "removd",
-  "version": "1.0.1",
-  "description": "automatic ai cut outs with remove.bg service for people and products",
+  "version": "1.0.2",
+  "description": "automatic ai cut outs of people and products with remove.bg service",
   "main": "removd.js",
   "scripts": {
     "test": "mocha --timeout 0 tests/*",

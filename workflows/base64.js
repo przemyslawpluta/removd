@@ -117,17 +117,29 @@ async function base64Workflow(options) {
 
     const formData = {
         image_file_b64,
-        size: dim.size
+        size: dim.size,
+        channels: 'rgba',
+        type: 'auto'
     };
 
-    if (options.size && !common.supportedSizes(options.size)) {
-        return {
-            error: 'Unsupported size'
-        };
+    const size = common.support(formData, options, 'size');
+
+    if (size.error) {
+        return size;
     }
 
-    if (options.size && common.supportedSizes(options.size) && formData.size !== options.size) {
-        formData.size = options.size;
+    const channels = common.support(formData, options, 'channels');
+
+    if (channels.error) {
+        return channels;
+
+    }
+
+    const detect = common.support(formData, options, 'detect');
+
+    if (detect.error) {
+        return detect;
+
     }
 
     let file = null;

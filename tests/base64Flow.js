@@ -61,7 +61,31 @@ describe('# base64 workflow', () => {
                 source: `${dir}/${testFile_LQ}.txt`
             });
             expect(done).to.deep.equal({
-                error: 'Unsupported size'
+                error: 'Unsupported size type'
+            });
+        });
+    });
+
+    context('with correct source but unsupported detect type', () => {
+        it('should return unsupported detect type error', async () => {
+            const done = await removd.base64({
+                detect: 'ufo',
+                source: `${dir}/${testFile_LQ}.txt`
+            });
+            expect(done).to.deep.equal({
+                error: 'Unsupported detect type'
+            });
+        });
+    });
+
+    context('with correct source but unsupported channels type', () => {
+        it('should return unsupported channels type error', async () => {
+            const done = await removd.base64({
+                channels: 'red',
+                source: `${dir}/${testFile_LQ}.txt`
+            });
+            expect(done).to.deep.equal({
+                error: 'Unsupported channels type'
             });
         });
     });

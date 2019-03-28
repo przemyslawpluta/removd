@@ -63,7 +63,35 @@ describe('# url workflow', () => {
             });
 
             expect(done).to.deep.equal({
-                error: 'Unsupported size'
+                error: 'Unsupported size type'
+            });
+        });
+    });
+
+    context('with correct source and detect type', () => {
+        it('should return unsupported detect type error', async () => {
+            const done = await removd.url({
+                detect: 'ufo',
+                destination: `${dir}/`,
+                source: testFile_LQ
+            });
+
+            expect(done).to.deep.equal({
+                error: 'Unsupported detect type'
+            });
+        });
+    });
+
+    context('with correct source and channels type', () => {
+        it('should return unsupported channels type error', async () => {
+            const done = await removd.url({
+                channels: 'red',
+                destination: `${dir}/`,
+                source: testFile_LQ
+            });
+
+            expect(done).to.deep.equal({
+                error: 'Unsupported channels type'
             });
         });
     });

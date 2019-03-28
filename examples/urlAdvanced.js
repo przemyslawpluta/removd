@@ -4,6 +4,8 @@ const removd = require('../removd');
 
     const done = await removd.url({
         size: 'regular',
+        detect: 'person',
+        channels: 'alpha',
         destination: '/outcome/',
         source: [
             'https://images.unsplash.com/photo-1520853504280-249b72dc947c?w=1500&q=80',

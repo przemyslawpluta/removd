@@ -9,7 +9,9 @@ const common = require('../lib/common');
 
 const mainName = 'christopher-campbell-28567-unsplash';
 const testFile_LQ = `${mainName}-400x267`;
+const testFileProduct_LQ = `product/mnz-1214788-unsplash-400x267`;
 const testFile_MQ = `${mainName}-1500x1000`;
+const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1029x1500`;
 const testFile_HQ = `${mainName}-2400x1600`;
 const testFile_UHD = `${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, '../assets/');
@@ -33,7 +35,7 @@ describe('# service API file workflow test', () => {
             });
 
             expect(failedOutcome).to.deep.equal({
-                error: "No persons found: At the moment remove.bg only works for photos with at least one person in them. Sorry – please select an appropriate image.",
+                error: "Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.",
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 
@@ -54,7 +56,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -73,15 +75,18 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
+                detected: 'person',
                 dimensions: '400x267',
                 size: 'regular'
             });
@@ -132,7 +137,7 @@ describe('# service API file workflow test', () => {
 
     });
 
-    context('with correct source, same destination a regular image with person and size set to auto', () => {
+    context('with correct source, same destination a regular image with person, size auto detected and alpha channels', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -142,11 +147,11 @@ describe('# service API file workflow test', () => {
         it('should return object', async () => {
 
             outcome = await removd.file({
-                size: 'auto',
+                channels: 'alpha',
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -165,16 +170,115 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 1,
+                detected: 'person',
+                dimensions: '400x267',
+                size: 'regular'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved regular image should be 400x267', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 400,
+                height: 267
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a regular image with person and size set to auto and detect set', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFile_LQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                size: 'auto',
+                detect: 'person',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be regular and charged 1 credit', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'auto'
             });
 
@@ -224,12 +328,12 @@ describe('# service API file workflow test', () => {
 
     });
 
-    context('with correct source, same destination a regular image with person and size auto detected and destination file name bumped', () => {
+    context('with correct source, same destination a regular image with product', () => {
 
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/bump/${testFile_LQ}.jpg`;
+        const testFile = `${dir}/${testFileProduct_LQ}.jpg`;
 
         it('should return object', async () => {
 
@@ -237,7 +341,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -256,16 +360,209 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'product',
+                size: 'regular'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved regular image should be 400x267', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 400,
+                height: 267
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a medium image with product, detect set to product and alpha channel', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                channels: 'alpha',
+                detect: 'product',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be medium and charged 3 credit', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1029x1500',
+                detected: 'product',
+                size: 'hd'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved medium image should be 1029x1500', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1029,
+                height: 1500
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a regular image with person and size auto detected and destination file name bumped', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/bump/${testFile_LQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be regular and charged 1 credit', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 1,
+                dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -331,7 +628,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -350,16 +647,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -423,7 +723,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -442,16 +742,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -513,7 +816,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -532,16 +835,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
+                detected: 'person',
                 size: 'hd'
             });
 
@@ -604,7 +910,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -623,16 +929,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '612x408',
+                detected: 'person',
                 size: 'regular'
             });
 
@@ -694,7 +1003,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -713,16 +1022,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
+                detected: 'person',
                 size: 'medium'
             });
 
@@ -784,7 +1096,7 @@ describe('# service API file workflow test', () => {
                 source: testFile
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
 
             sourceFile = path.parse(testFile);
             destinationFile = path.parse(outcome.destination);
@@ -803,16 +1115,19 @@ describe('# service API file workflow test', () => {
             const {
                 charged,
                 dimensions,
+                detected,
                 size
             } = outcome;
 
             expect({
                 charged,
                 dimensions,
+                detected,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
+                detected: 'person',
                 size: '4k'
             });
 

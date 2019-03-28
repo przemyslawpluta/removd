@@ -4,9 +4,9 @@
 [![Downloads](http://img.shields.io/npm/dm/removd.svg)](https://npmjs.org/package/removd)
 [![CircleCI](https://circleci.com/gh/przemyslawpluta/removd/tree/master.svg?style=svg)](https://circleci.com/gh/przemyslawpluta/removd/tree/master)
 
-Automatic ai cut outs with [remove.bg](https://www.remove.bg) service for people and products.
+Automatic ai cut outs of for people and products with [remove.bg](https://www.remove.bg) service.
 
-![s1](https://www.remove.bg/images/samples/combined/s1.jpg)
+![splash](assets/splash/splash.jpg?raw=true)
 
 ## Requirements
 
@@ -33,6 +33,8 @@ File workflow allows to upload files and save its outcome. Available options:
 - **source** `required (string || array)` - source filename to be forwarded for processing. Can be either single file or array of files (**.png**, **.jpg**, **.jpeg** files are supported).
 - **glob** `optional (boolean)` - glob patterns can be used to match files in multiple directories.
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted image will be automatically recognised and correct `size` option will be assigned.
+- **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
+- **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable).
@@ -60,6 +62,7 @@ Response `done (object)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/directory/christopher-campbell-28567-unsplash-400x267.png",
+    "detected": "person",
     "resized": false
   }
 ```
@@ -69,6 +72,7 @@ Response `done (object)` will be similar to:
 - duration - time it took to process the image
 - dimensions - dimanesions of the image
 - destination - directory where outcome image has been saved to
+- detected - outcome of the detection process
 - resized - if image has been resized or not during processing
 
 ### Advanced file usage
@@ -76,6 +80,8 @@ Response `done (object)` will be similar to:
 ```js
 await removd.file({
     deleteOriginal: true,
+    channels: "alpha",
+    detect: "person",
     destination: '/new-directory/christopher-campbell.png',
     source: [
         '/directory/christopher-campbell-28567-unsplash-400x267.jpg',
@@ -94,6 +100,7 @@ Response `(array)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/new-directory/christopher-campbell.png",
+    "detected": "person",
     "resized": false
   },
   {
@@ -102,6 +109,7 @@ Response `(array)` will be similar to:
     "duration": "371 ms",
     "dimensions": "2400x1600",
     "destination": "/new-directory/christopher-campbell-23TplPdSD.png",
+    "detected": "person",
     "resized": false
   }
 ]
@@ -130,6 +138,7 @@ Response `(array)` will be similar to:
     "duration": "683 ms",
     "dimensions": "3750x2500",
     "destination": "/new-directory/christopher-campbell-28567-unsplash-3750x2500.png",
+    "detected": "person",
     "resized": false
   },
   {
@@ -138,6 +147,7 @@ Response `(array)` will be similar to:
     "duration": "111 ms",
     "dimensions": "1500x1000",
     "destination": "/new-directory/christopher-campbell-28567-unsplash-1500x1000.png",
+    "detected": "person",
     "resized": false
   },
   {
@@ -146,6 +156,7 @@ Response `(array)` will be similar to:
     "duration": "371 ms",
     "dimensions": "2400x1600",
     "destination": "/new-directory/christopher-campbell-28567-unsplash-2400x1600.png",
+    "detected": "person",
     "resized": false
   }
 ]
@@ -156,6 +167,8 @@ Response `(array)` will be similar to:
 Url workflow allows to upload images available via url and save its outcome. Available options:
 
 - **source** `required (string || array)` - source url to be forwarded for processing. Can be either single url or array of urls.
+- **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
+- **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
 - **destination** `required (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source url filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id.
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted url image will be automatically recognised and correct `size` option will be assigned.
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable)
@@ -184,6 +197,7 @@ Response `done (object)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/directory/photo-1504455583697-3a9b04be6397.png",
+    "detected": "person",
     "resized": false
   }
 ```
@@ -193,12 +207,14 @@ Response `done (object)` will be similar to:
 - duration - time it took to process the image
 - dimensions - dimanesions of the image
 - destination - directory where outcome image has been saved to
+- detected - outcome of the detection process
 - resized - if image has been resized or not during processing
 
 ### Advanced url usage
 
 ```js
 await removd.url({
+    detect: "person",
     destination: '/new-directory/',
     source: [
         'https://images.unsplash.com/photo-1504455583697-3a9b04be6397?w=400&q=80',
@@ -217,6 +233,7 @@ Response `(array)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/new-directory/photo-1504455583697-3a9b04be6397l.png",
+    "detected": "person",
     "resized": false
   },
   {
@@ -225,6 +242,7 @@ Response `(array)` will be similar to:
     "duration": "371 ms",
     "dimensions": "2400x1600",
     "destination": "/new-directory/photo-1504455583697-3a9b04be6397l-2FF3lddS1.png",
+    "detected": "person",
     "resized": false
   }
 ]
@@ -237,6 +255,8 @@ Base64 workflow allows to upload images, base64 and base64url encoded txt files 
 - **source** `required (string || array)` - source filename to be forwarded for processing. Can be either single file or array of files (**.png**, **.jpg**, **.jpeg**, **.txt** files are supported).
 - **glob** `optional (boolean)` - glob patterns can be used to match files in multiple directories.
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted image will be automatically recognised and correct `size` option will be assigned.
+- **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
+- **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
 - **toImage** `optional (boolean)` - if source image is a base64 or base64url encoded text file processed outcome can be saved as an image (defaults to `false`).
@@ -265,6 +285,7 @@ Response `done (object)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/directory/christopher-campbell-28567-unsplash-400x267-g35fgj1Sp.txt",
+    "detected": "person",
     "resized": false
   }
 ```
@@ -274,6 +295,7 @@ Response `done (object)` will be similar to:
 - duration - time it took to process the image
 - dimensions - dimanesions of the image
 - destination - directory where outcome image has been saved to
+- detected - outcome of the detection process
 - resized - if image has been resized or not during processing
 
 ### Advanced base64 usage
@@ -299,6 +321,7 @@ Response `(array)` will be similar to:
     "duration": "211 ms",
     "dimensions": "400x267",
     "destination": "/new-directory/christopher-campbell.png",
+    "detected": "person",
     "resized": false
   },
   {
@@ -307,6 +330,7 @@ Response `(array)` will be similar to:
     "duration": "371 ms",
     "dimensions": "2400x1600",
     "destination": "/new-directory/christopher-campbell-56T11Ptk3.png",
+    "detected": "person",
     "resized": false
   }
 ]
@@ -369,11 +393,11 @@ As record is done against actual API endoints you'll be charged relevant amount 
 
 | Workflow | Credits |
 |------|--------:|
-|file|58|
-|url|38|
-|base64|37|
+|file|63|
+|url|45|
+|base64|46|
 
-In total you'd be charged `133 credits` for all available tests.
+In total you'd be charged `154 credits` for all available tests.
 
 ## License
 
