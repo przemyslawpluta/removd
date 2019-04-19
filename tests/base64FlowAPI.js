@@ -13,7 +13,7 @@ const mainName = 'christopher-campbell-28567-unsplash';
 const testFile_LQ = `${mainName}-400x267`;
 const testFileProduct_LQ = `product/ruslan-bardash-351288-unsplash-267x400`;
 const testFile_MQ = `${mainName}-1500x1000`;
-const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1029x1500`;
+const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1000x1458`;
 const testFile_HQ = `${mainName}-2400x1600`;
 const testFile_UHD = `${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, `../assets/`);
@@ -208,7 +208,7 @@ describe('# service API base64 workflow test', () => {
 
         it('source and destinaton extensions should not match', () => {
             expect(sourceFile.ext).to.equal('.jpg');
-            expect(destinationFile.ext).to.equal('.png');
+            expect(destinationFile.ext).to.equal('.jpeg');
         });
 
         it('saved regular image should be 400x267', async () => {
@@ -447,7 +447,7 @@ describe('# service API base64 workflow test', () => {
             });
         });
 
-        it('outcome should be hd and charged 5 credits', () => {
+        it('outcome should be medium and charged 3 credits', () => {
             const {
                 charged,
                 dimensions,
@@ -461,10 +461,199 @@ describe('# service API base64 workflow test', () => {
                 detected,
                 size
             }).to.deep.equal({
-                charged: 5,
-                dimensions: '1029x1500',
+                charged: 3,
+                dimensions: '1000x1458',
                 detected: 'product',
-                size: 'hd'
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
+            });
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with image as source, same destination a medium image with format set and named background color and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.base64({
+                format: 'jpg',
+                background: 'blue',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be medium and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
+            });
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with image as source, same destination a medium image with hex background and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.base64({
+                background: '81d4fa77',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be medium and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
             });
 
         });
@@ -494,7 +683,7 @@ describe('# service API base64 workflow test', () => {
             expect(destinationFile.ext).to.equal('.png');
         });
 
-        it('saved hd image should be 1029x1500', async () => {
+        it('saved medium image should be 1000x1458', async () => {
             const {
                 width,
                 height
@@ -504,8 +693,102 @@ describe('# service API base64 workflow test', () => {
                 width,
                 height
             }).to.deep.equal({
-                width: 1029,
-                height: 1500
+                width: 1000,
+                height: 1458
+            });
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with image as source, same destination a medium image with rgba background set and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.base64({
+                background: 'rgba(197, 127, 73, .5)',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be medium and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
             });
             await unlink(outcome.destination);
         });
@@ -777,6 +1060,74 @@ describe('# service API base64 workflow test', () => {
         it('should return object', async () => {
 
             outcome = await removd.base64({
+                destination: `${dir}/${targetName}.txt`,
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be regular and charged 1 credit', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 1,
+                dimensions: '400x267',
+                detected: 'person',
+                size: 'regular'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destinaton file names should not match', () => {
+            expect(destinationFile.name).to.equal(`${targetName}`);
+        });
+
+        it('source and destinaton extensions should match', async () => {
+            expect(sourceFile.ext).to.equal(destinationFile.ext);
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with text source, same destination a regular image with person and named color background set', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFile_LQ}.txt`;
+        const targetName = 'my-new-test-file';
+
+        it('should return object', async () => {
+
+            outcome = await removd.base64({
+                background: 'yellow',
                 destination: `${dir}/${targetName}.txt`,
                 source: testFile
             });

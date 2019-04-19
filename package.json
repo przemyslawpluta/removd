@@ -1,6 +1,6 @@
 {
   "name": "removd",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "automatic ai cut outs of people and products with remove.bg service",
   "main": "removd.js",
   "scripts": {
@@ -52,20 +52,25 @@
   },
   "dependencies": {
     "base64-stream": "^1.0.0",
-    "del": "^4.0.0",
+    "colornames": "^1.1.1",
+    "del": "^4.1.0",
     "dotenv": "^7.0.0",
-    "globby": "^9.1.0",
-    "image-size": "^0.7.2",
-    "image-type": "^4.0.0",
+    "globby": "^9.2.0",
+    "hex-rgb": "^4.1.0",
+    "image-size": "^0.7.3",
+    "image-type": "^4.1.0",
     "is-base64": "^0.1.0",
+    "mime": "^2.4.2",
     "node-fetch": "^2.3.0",
     "pretty-hrtime": "^1.0.3",
+    "rgb-hex": "^2.1.0",
+    "round-to": "^3.0.0",
     "shortid": "^2.2.14",
     "valid-data-url": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "mocha": "^5.2.0",
     "nock": "^10.0.6"
   }

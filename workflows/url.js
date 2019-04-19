@@ -57,25 +57,15 @@ async function urlWorkflow(options) {
     const formData = {
         image_url: url.href,
         channels: 'rgba',
+        bg_color: '00000000',
+        format: 'auto',
         type: 'auto'
     };
 
-    const size = common.support(formData, options, 'size');
+    const validate = ['size', 'channels', 'detect', 'format', 'background'].map(item => common.support(formData, options, item)).filter(item => item.error);
 
-    if (size.error) {
-        return size;
-    }
-
-    const channels = common.support(formData, options, 'channels');
-
-    if (channels.error) {
-        return channels;
-    }
-
-    const detect = common.support(formData, options, 'detect');
-
-    if (detect.error) {
-        return detect;
+    if (validate.length) {
+        return validate.shift();
     }
 
     const dim = await common.getDimensionsUrl(options.source);

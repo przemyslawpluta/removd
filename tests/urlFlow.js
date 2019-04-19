@@ -82,7 +82,7 @@ describe('# url workflow', () => {
         });
     });
 
-    context('with correct source and channels type', () => {
+    context('with correct source and incorrect channels type', () => {
         it('should return unsupported channels type error', async () => {
             const done = await removd.url({
                 channels: 'red',
@@ -92,6 +92,48 @@ describe('# url workflow', () => {
 
             expect(done).to.deep.equal({
                 error: 'Unsupported channels type'
+            });
+        });
+    });
+
+    context('with correct source and incorrect format type', () => {
+        it('should return unsupported format type error', async () => {
+            const done = await removd.url({
+                format: 'bmp',
+                destination: `${dir}/`,
+                source: testFile_LQ
+            });
+
+            expect(done).to.deep.equal({
+                error: 'Unsupported format type'
+            });
+        });
+    });
+
+    context('with correct source and incorrect hex background code', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.url({
+                background: '?31]',
+                destination: `${dir}/`,
+                source: testFile_LQ
+            });
+
+            expect(done).to.deep.equal({
+                error: 'Expected a valid hex string'
+            });
+        });
+    });
+
+    context('with correct source and incorrect rgba background color', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.url({
+                background: 'rgba(123, 213, 123, 90)',
+                destination: `${dir}/`,
+                source: testFile_LQ
+            });
+
+            expect(done).to.deep.equal({
+                error: 'Expected alpha value (90) as a fraction or percentage'
             });
         });
     });

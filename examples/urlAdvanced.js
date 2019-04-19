@@ -6,6 +6,7 @@ const removd = require('../removd');
         size: 'regular',
         detect: 'person',
         channels: 'alpha',
+        background: '81d4fa77',
         destination: '/outcome/',
         source: [
             'https://images.unsplash.com/photo-1520853504280-249b72dc947c?w=1500&q=80',

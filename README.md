@@ -1,8 +1,8 @@
 # removd
 
-[![NPM version](http://img.shields.io/npm/v/removd.svg)](https://npmjs.org/package/removd)
-[![Downloads](http://img.shields.io/npm/dm/removd.svg)](https://npmjs.org/package/removd)
-[![CircleCI](https://circleci.com/gh/przemyslawpluta/removd/tree/master.svg?style=svg)](https://circleci.com/gh/przemyslawpluta/removd/tree/master)
+[![NPM version](https://img.shields.io/npm/v/removd.svg)](https://npmjs.org/package/removd)
+[![Downloads](https://img.shields.io/npm/dm/removd.svg)](https://npmjs.org/package/removd)
+[![CircleCI](https://img.shields.io/circleci/project/github/przemyslawpluta/removd/master.svg)](https://circleci.com/gh/przemyslawpluta/removd/tree/master)
 
 Automatic ai cut outs of people and products with [remove.bg](https://www.remove.bg) service.
 
@@ -35,6 +35,8 @@ File workflow allows to upload files and save its outcome. Available options:
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted image will be automatically recognised and correct `size` option will be assigned.
 - **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
 - **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
+- **background** `optional (string)` - can be set to hex color code RGB, RGBA, RRGGBB, RRGGBBAA e.g. **81d4fa77** or rgba colors (R, G, B), (R, G, B, A), rgba(R, G, B, A) e.g. **rgba(197, 127, 73, .5)** or color name e.g. **red**, **green** etc. If omitted defaults to fully transparent hex.
+- **format** `optional (string)` - can be set to **auto**, **png**, **jpg** format. If omitted defaults to PNG format if transparent regions exists, otherwise JPEG.
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable).
@@ -82,6 +84,7 @@ await removd.file({
     deleteOriginal: true,
     channels: 'alpha',
     detect: 'person',
+    format: 'jpg',
     destination: '/new-directory/christopher-campbell.png',
     source: [
         '/directory/christopher-campbell-28567-unsplash-400x267.jpg',
@@ -99,7 +102,7 @@ Response `(array)` will be similar to:
     "size": "regular",
     "duration": "211 ms",
     "dimensions": "400x267",
-    "destination": "/new-directory/christopher-campbell.png",
+    "destination": "/new-directory/christopher-campbell.jpeg",
     "detected": "person",
     "resized": false
   },
@@ -108,7 +111,7 @@ Response `(array)` will be similar to:
     "size": "hd",
     "duration": "371 ms",
     "dimensions": "2400x1600",
-    "destination": "/new-directory/christopher-campbell-23TplPdSD.png",
+    "destination": "/new-directory/christopher-campbell-23TplPdSD.jpeg",
     "detected": "person",
     "resized": false
   }
@@ -121,6 +124,7 @@ If `glob` enabled glob patterns can be used in the source to match images sent f
 await removd.file({
     glob: true,
     destination: '/new-directory/',
+    background: 'rgba(111, 98, 199, 0.51)',
     source: [
         '/initial-directory/*.jpg',
         '/directory/christopher-campbell-28567-unsplash-2400x1600.jpg'
@@ -169,6 +173,8 @@ Url workflow allows to upload images available via url and save its outcome. Ava
 - **source** `required (string || array)` - source url to be forwarded for processing. Can be either single url or array of urls.
 - **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
 - **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
+- **background** `optional (string)` - can be set to hex color code RGB, RGBA, RRGGBB, RRGGBBAA e.g. **81d4fa77** or rgba colors (R, G, B), (R, G, B, A), rgba(R, G, B, A) e.g. **rgba(197, 127, 73, .5)** or color name e.g. **red**, **green** etc. If omitted defaults to fully transparent hex.
+- **format** `optional (string)` - can be set to **auto**, **png**, **jpg** format. If omitted defaults to PNG format if transparent regions exists, otherwise JPEG.
 - **destination** `required (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source url filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id.
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted url image will be automatically recognised and correct `size` option will be assigned.
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable)
@@ -215,6 +221,8 @@ Response `done (object)` will be similar to:
 ```js
 await removd.url({
     detect: 'person',
+    format: 'jpg',
+    background: 'red',
     destination: '/new-directory/',
     source: [
         'https://images.unsplash.com/photo-1504455583697-3a9b04be6397?w=400&q=80',
@@ -232,7 +240,7 @@ Response `(array)` will be similar to:
     "size": "regular",
     "duration": "211 ms",
     "dimensions": "400x267",
-    "destination": "/new-directory/photo-1504455583697-3a9b04be6397l.png",
+    "destination": "/new-directory/photo-1504455583697-3a9b04be6397l.jpeg",
     "detected": "person",
     "resized": false
   },
@@ -241,7 +249,7 @@ Response `(array)` will be similar to:
     "size": "hd",
     "duration": "371 ms",
     "dimensions": "2400x1600",
-    "destination": "/new-directory/photo-1504455583697-3a9b04be6397l-2FF3lddS1.png",
+    "destination": "/new-directory/photo-1504455583697-3a9b04be6397l-2FF3lddS1.jpeg",
     "detected": "person",
     "resized": false
   }
@@ -257,6 +265,8 @@ Base64 workflow allows to upload images, base64 and base64url encoded txt files 
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted image will be automatically recognised and correct `size` option will be assigned.
 - **detect** `optional (string)` - can be set to **person**, **product**, **auto**. If omitted image will be automatically recognised.
 - **channels** `optional (string)` - can be set to **rgba**, **alpha**. If omitted defaults to **rgba** as RGB color corrections is used for highest quality.
+- **background** `optional (string)` - can be set to hex color code RGB, RGBA, RRGGBB, RRGGBBAA e.g. **81d4fa77** or rgba colors (R, G, B), (R, G, B, A), rgba(R, G, B, A) e.g. **rgba(197, 127, 73, .5)** or color name e.g. **red**, **green** etc. If omitted defaults to fully transparent hex.
+- **format** `optional (string)` - can be set to **auto**, **png**, **jpg** format. If omitted defaults to PNG format if transparent regions exists, otherwise JPEG.
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
 - **toImage** `optional (boolean)` - if source image is a base64 or base64url encoded text file processed outcome can be saved as an image (defaults to `false`).
@@ -304,6 +314,7 @@ Response `done (object)` will be similar to:
 await removd.base64({
     toImage: true,
     destination: '/new-directory/christopher-campbell.png',
+    background: '00afff1f',
     source: [
         '/directory/christopher-campbell-28567-unsplash-400x267.jpg',
         '/directory/christopher-campbell-28567-unsplash-2400x1600.txt'
@@ -393,11 +404,11 @@ As record is done against actual API endoints you'll be charged relevant amount 
 
 | Workflow | Credits |
 |------|--------:|
-|file|63|
-|url|45|
-|base64|46|
+|file|72|
+|url|60|
+|base64|54|
 
-In total you'd be charged `154 credits` for all available tests.
+In total you'd be charged `186 credits` for all available tests.
 
 ## License
 

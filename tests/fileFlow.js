@@ -42,7 +42,7 @@ describe('# file workflow', () => {
         });
     });
 
-    context('with correct source but unsupported file type', () => {
+    context('with correct source but incorrect file type', () => {
         it('should return unsupported file format error', async () => {
             const done = await removd.file({
                 source: `${dir}/${testFile_LQ}.bmp`
@@ -54,7 +54,7 @@ describe('# file workflow', () => {
         });
     });
 
-    context('with correct source but unsupported size', () => {
+    context('with correct source but incorrect size', () => {
         it('should return unsupported size format error', async () => {
             const done = await removd.file({
                 size: 'UHD',
@@ -66,7 +66,7 @@ describe('# file workflow', () => {
         });
     });
 
-    context('with correct source but unsupported detect type', () => {
+    context('with correct source but incorrect detect type', () => {
         it('should return unsupported detect type error', async () => {
             const done = await removd.file({
                 detect: 'ufo',
@@ -78,7 +78,7 @@ describe('# file workflow', () => {
         });
     });
 
-    context('with correct source but unsupported channels type', () => {
+    context('with correct source but incorrect channels type', () => {
         it('should return unsupported channels type error', async () => {
             const done = await removd.file({
                 channels: 'random',
@@ -86,6 +86,42 @@ describe('# file workflow', () => {
             });
             expect(done).to.deep.equal({
                 error: 'Unsupported channels type'
+            });
+        });
+    });
+
+    context('with correct source but incorrect format type', () => {
+        it('should return unsupported format type error', async () => {
+            const done = await removd.file({
+                format: 'bmp',
+                source: `${dir}/${testFile_LQ}.jpg`
+            });
+            expect(done).to.deep.equal({
+                error: 'Unsupported format type'
+            });
+        });
+    });
+
+    context('with correct source but incorrect hex background code', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.file({
+                background: '?31]',
+                source: `${dir}/${testFile_LQ}.jpg`
+            });
+            expect(done).to.deep.equal({
+                error: 'Expected a valid hex string'
+            });
+        });
+    });
+
+    context('with correct source but incorrect rgba background color', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.file({
+                background: 'rgba(123, 213, 123, 90)',
+                source: `${dir}/${testFile_LQ}.jpg`
+            });
+            expect(done).to.deep.equal({
+                error: 'Expected alpha value (90) as a fraction or percentage'
             });
         });
     });

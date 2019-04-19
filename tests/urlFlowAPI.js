@@ -394,6 +394,249 @@ describe('# service API url workflow', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
+        it('destinaton extension should not have a transparency', () => {
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved hd image should be 1029x1543', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1029,
+                height: 1543
+            });
+
+            await del([`${dir}/*.jpeg`]);
+
+        });
+
+    });
+
+    context('with correct source and destination a hd image with format set and named background color', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                format: 'jpg',
+                background: 'blue',
+                destination: dir,
+                source: testFileProduct_MQ
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            const url = new URL(testFileProduct_MQ);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('outcome should be hd and charged 5 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 5,
+                dimensions: '1029x1543',
+                detected: 'product',
+                size: 'hd'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('destinaton extension should not have a transparency', () => {
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved hd image should be 1029x1543', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1029,
+                height: 1543
+            });
+
+            await del([`${dir}/*.jpeg`]);
+
+        });
+
+    });
+
+    context('with correct source and destination a hd image with hex background and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                background: '81d4fa77',
+                destination: dir,
+                source: testFileProduct_MQ
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            const url = new URL(testFileProduct_MQ);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('outcome should be hd and charged 5 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 5,
+                dimensions: '1029x1543',
+                detected: 'product',
+                size: 'hd'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('destinaton extension should have a transparency', () => {
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved hd image should be 1029x1543', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1029,
+                height: 1543
+            });
+
+        });
+
+    });
+
+    context('with correct source and destination a hd image with rgba background set and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        let deconstructed = [];
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                background: 'rgba(197, 127, 73, .5)',
+                destination: dir,
+                source: testFileProduct_MQ
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            const url = new URL(testFileProduct_MQ);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('outcome should be hd and charged 5 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 5,
+                dimensions: '1029x1543',
+                detected: 'product',
+                size: 'hd'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should not match with id added to destinaton filename', () => {
+            deconstructed = destinationFile.name.split('-');
+            const id = deconstructed.pop();
+            expect(`${sourceFile.name}`).to.equal(`${deconstructed.join('-')}`);
+            expect(id).to.have.lengthOf(9);
+        });
+
         it('saved hd image should be 1029x1543', async () => {
             const {
                 width,

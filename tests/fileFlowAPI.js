@@ -11,7 +11,7 @@ const mainName = 'christopher-campbell-28567-unsplash';
 const testFile_LQ = `${mainName}-400x267`;
 const testFileProduct_LQ = `product/mnz-1214788-unsplash-400x267`;
 const testFile_MQ = `${mainName}-1500x1000`;
-const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1029x1500`;
+const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1000x1458`;
 const testFile_HQ = `${mainName}-2400x1600`;
 const testFile_UHD = `${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, '../assets/');
@@ -210,7 +210,7 @@ describe('# service API file workflow test', () => {
 
         it('source and destinaton extensions should not match', () => {
             expect(sourceFile.ext).to.equal('.jpg');
-            expect(destinationFile.ext).to.equal('.png');
+            expect(destinationFile.ext).to.equal('.jpeg');
         });
 
         it('saved regular image should be 400x267', async () => {
@@ -467,9 +467,200 @@ describe('# service API file workflow test', () => {
                 size
             }).to.deep.equal({
                 charged: 3,
-                dimensions: '1029x1500',
+                dimensions: '1000x1458',
                 detected: 'product',
-                size: 'hd'
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a medium image with format set and named background color', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                format: 'jpg',
+                background: 'blue',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be hd and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.jpeg');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a medium image with hex background and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                background: '81d4fa77',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be hd and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
             });
 
         });
@@ -499,7 +690,7 @@ describe('# service API file workflow test', () => {
             expect(destinationFile.ext).to.equal('.png');
         });
 
-        it('saved medium image should be 1029x1500', async () => {
+        it('saved medium image should be 1000x1458', async () => {
             const {
                 width,
                 height
@@ -509,8 +700,103 @@ describe('# service API file workflow test', () => {
                 width,
                 height
             }).to.deep.equal({
-                width: 1029,
-                height: 1500
+                width: 1000,
+                height: 1458
+            });
+
+            await unlink(outcome.destination);
+        });
+
+    });
+
+    context('with correct source, same destination a medium image with rgba background set and product autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        const testFile = `${dir}/${testFileProduct_MQ}.jpg`;
+
+        it('should return object', async () => {
+
+            outcome = await removd.file({
+                background: 'rgba(197, 127, 73, .5)',
+                source: testFile
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(testFile);
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('should preserve original source file', async () => {
+            const originalSource = await common.currentFile(testFile);
+            expect(originalSource).to.deep.equal({
+                exists: true,
+                source: testFile
+            });
+        });
+
+        it('outcome should be hd and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1000x1458',
+                detected: 'product',
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(outcome.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(outcome.destination)).to.equal(path.dirname(testFile));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${destinationFile.name}`);
+        });
+
+        it('source and destinaton extensions should not match', () => {
+            expect(sourceFile.ext).to.equal('.jpg');
+            expect(destinationFile.ext).to.equal('.png');
+        });
+
+        it('saved medium image should be 1000x1458', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1000,
+                height: 1458
             });
 
             await unlink(outcome.destination);

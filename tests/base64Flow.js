@@ -78,7 +78,7 @@ describe('# base64 workflow', () => {
         });
     });
 
-    context('with correct source but unsupported channels type', () => {
+    context('with correct source but incorrect channels type', () => {
         it('should return unsupported channels type error', async () => {
             const done = await removd.base64({
                 channels: 'red',
@@ -86,6 +86,42 @@ describe('# base64 workflow', () => {
             });
             expect(done).to.deep.equal({
                 error: 'Unsupported channels type'
+            });
+        });
+    });
+
+    context('with correct source but incorrect format type', () => {
+        it('should return unsupported format type error', async () => {
+            const done = await removd.base64({
+                format: 'bmp',
+                source: `${dir}/${testFile_LQ}.txt`
+            });
+            expect(done).to.deep.equal({
+                error: 'Unsupported format type'
+            });
+        });
+    });
+
+    context('with correct source but incorrect hex background code', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.base64({
+                background: '?31]',
+                source: `${dir}/${testFile_LQ}.txt`
+            });
+            expect(done).to.deep.equal({
+                error: 'Expected a valid hex string'
+            });
+        });
+    });
+
+    context('with correct source but incorrect rgba background color', () => {
+        it('should return unsupported background type error', async () => {
+            const done = await removd.base64({
+                background: 'rgba(123, 213, 123, 90)',
+                source: `${dir}/${testFile_LQ}.txt`
+            });
+            expect(done).to.deep.equal({
+                error: 'Expected alpha value (90) as a fraction or percentage'
             });
         });
     });
