@@ -18,7 +18,7 @@ const testFile_HQ = `${mainName}-2400x1600`;
 const testFile_UHD = `${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, `../assets/`);
 
-describe('# service API base64 workflow test', () => {
+describe('# base64 workflow service API', () => {
 
     const recorder = record(path.parse(__filename).name);
     before(recorder.before);

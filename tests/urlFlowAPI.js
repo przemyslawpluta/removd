@@ -18,7 +18,7 @@ const testFile_LQ_green = 'https://images.unsplash.com/photo-1496769336828-c522a
 const targetName = 'unsplash-photo';
 const dir = path.resolve(__dirname, `../assets/`);
 
-describe('# service API url workflow', () => {
+describe('# url workflow service API', () => {
 
     const recorder = record(path.parse(__filename).name);
     before(recorder.before);

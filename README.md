@@ -39,6 +39,7 @@ File workflow allows to upload files and save its outcome. Available options:
 - **format** `optional (string)` - can be set to **auto**, **png**, **jpg** format. If omitted defaults to PNG format if transparent regions exists, otherwise JPEG.
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
+- **progress** `optional (boolean)` - track progress of processed images when source contains more then single item (defaults to `false`).
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable).
 
 ### Basic file usage
@@ -118,7 +119,7 @@ Response `(array)` will be similar to:
 ]
 ```
 
-If `glob` enabled glob patterns can be used in the source to match images sent for processing:
+If `glob` enabled glob patterns can be used in the source array to match images sent for processing:
 
 ```js
 await removd.file({
@@ -166,6 +167,70 @@ Response `(array)` will be similar to:
 ]
 ```
 
+To track progress of processed images enable `progress` option then initialise batch to start processing:
+
+```js
+  const batch = await removd.file({
+      glob: true,
+      progress: true,
+      destination: '/new-directory/',
+      source: [
+        '/initial-directory/*.jpg',
+        '/directory/christopher-campbell-28567-unsplash-2400x1600.jpg'
+      ]
+  });
+
+  const files = batch.files;
+
+  batch.progress.on('item', item => {});
+
+  const done = await batch.init();
+```
+
+Response `files (array)` will be similar to:
+
+```js
+[
+  '/initial-directory/christopher-campbell-28567-unsplash-1500x1000.jpg',
+  '/initial-directory/christopher-campbell-28567-unsplash-3750x2500.jpg',
+  '/directory/christopher-campbell-28567-unsplash-2400x1600.jpg'
+]
+```
+
+Response `done (array)` will be similar to:
+
+```json
+[
+  {
+    "charged": 8,
+    "size": "4k",
+    "duration": "683 ms",
+    "dimensions": "3750x2500",
+    "destination": "/new-directory/christopher-campbell-28567-unsplash-3750x2500.png",
+    "detected": "person",
+    "resized": false
+  },
+  {
+    "charged": 3,
+    "size": "medium",
+    "duration": "111 ms",
+    "dimensions": "1500x1000",
+    "destination": "/new-directory/christopher-campbell-28567-unsplash-1500x1000.png",
+    "detected": "person",
+    "resized": false
+  },
+  {
+    "charged": 5,
+    "size": "hd",
+    "duration": "371 ms",
+    "dimensions": "2400x1600",
+    "destination": "/new-directory/christopher-campbell-28567-unsplash-2400x1600.png",
+    "detected": "person",
+    "resized": false
+  }
+]
+```
+
 ### removd.url
 
 Url workflow allows to upload images available via url and save its outcome. Available options:
@@ -177,6 +242,7 @@ Url workflow allows to upload images available via url and save its outcome. Ava
 - **format** `optional (string)` - can be set to **auto**, **png**, **jpg** format. If omitted defaults to PNG format if transparent regions exists, otherwise JPEG.
 - **destination** `required (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source url filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id.
 - **size** `optional (string)` - can be set to **regular**, **medium**, **hd**, **4k**, **auto**. If omitted url image will be automatically recognised and correct `size` option will be assigned.
+- **progress** `optional (boolean)` - track progress of processed images when source contains more then single item (defaults to `false`).
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable)
 
 ### Basic url usage
@@ -270,6 +336,7 @@ Base64 workflow allows to upload images, base64 and base64url encoded txt files 
 - **destination** `optional (string)` - directory where final image will be saved. Can be either path to directory or path to filename. If directory specyfied source filename will be used for saved outcome. If filename specyfied all processed images would be saved with it. If file already exists new file will be suffixed with nine character short id (defaults to `source` image directory).
 - **deleteOriginal** `optional (boolean)` - source image can be deleted after outcome returned back and saved (defaults to `false`).
 - **toImage** `optional (boolean)` - if source image is a base64 or base64url encoded text file processed outcome can be saved as an image (defaults to `false`).
+- **progress** `optional (boolean)` - track progress of processed images when source contains more then single item (defaults to `false`).
 - **apikey** `optional (string)` - service api key (defaults to REMOVD_API_KEY env veriable)
 
 ### Basic base64 usage
@@ -404,11 +471,11 @@ As record is done against actual API endoints you'll be charged relevant amount 
 
 | Workflow | Credits |
 |------|--------:|
-|file|72|
-|url|60|
-|base64|54|
+|file|89|
+|url|77|
+|base64|71|
 
-In total you'd be charged `186 credits` for all available tests.
+In total you'd be charged `237 credits` for all available tests.
 
 ## License
 

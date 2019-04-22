@@ -16,7 +16,7 @@ const testFile_HQ = `${mainName}-2400x1600`;
 const testFile_UHD = `${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, `../assets/`);
 
-describe('# service API base64 workflow test', () => {
+describe('# base64 workflow batch service API', () => {
 
     const recorder = record(path.parse(__filename).name);
     before(recorder.before);
@@ -58,7 +58,296 @@ describe('# service API base64 workflow test', () => {
 
         });
 
-        it('should return succesfully processed image for medium quality image', () => {
+        it('should return successfully processed image for medium quality image', () => {
+
+            success = done.filter(item => item.dimensions === '1500x1000').shift();
+
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = success;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1500x1000',
+                detected: 'person',
+                size: 'medium'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(success.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_MQ}.jpg`));
+        });
+
+        it('saved medium image should be 1500x1000', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(success.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1500,
+                height: 1000
+            });
+            await del([`${dir}/*.png`]);
+        });
+
+        it('outcome should be regular url encoded image and charged 1 credit', () => {
+
+            success = done.filter(item => item.dimensions === '400x267').shift();
+
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(`${dir}/${testFile_LQ}-url.txt`);
+            destinationFile = path.parse(success.destination);
+
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = success;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 1,
+                dimensions: '400x267',
+                detected: 'person',
+                size: 'regular'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(success.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}-url.txt`));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(success.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: success.destination
+            });
+        });
+
+        it('source and destinaton file names should not match with id added to destinaton filename', () => {
+            const deconstructed = destinationFile.name.split('-');
+            const id = deconstructed.pop();
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${deconstructed.join('-')}`);
+            expect(id).to.have.lengthOf(9);
+        });
+
+        it('source and destinaton extensions should match', async () => {
+            expect(sourceFile.ext).to.equal(destinationFile.ext);
+            await unlink(success.destination);
+        });
+
+        it('outcome should be hd and charged 5 credit', () => {
+
+            success = done.filter(item => item.dimensions === '2400x1600').shift();
+
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(`${dir}/${testFile_HQ}.txt`);
+            destinationFile = path.parse(success.destination);
+
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = success;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 5,
+                dimensions: '2400x1600',
+                detected: 'person',
+                size: 'hd'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(success.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_HQ}.txt`));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(success.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: success.destination
+            });
+        });
+
+        it('source and destinaton file names should not match with id added to destinaton filename', () => {
+            const deconstructed = destinationFile.name.split('-');
+            const id = deconstructed.pop();
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${deconstructed.join('-')}`);
+            expect(id).to.have.lengthOf(9);
+        });
+
+        it('source and destinaton extensions should match', async () => {
+            expect(sourceFile.ext).to.equal(destinationFile.ext);
+            await unlink(success.destination);
+        });
+
+        it('outcome should be 4k and charged 8 credit', () => {
+
+            success = done.filter(item => item.dimensions === '3750x2500').shift();
+
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+
+            sourceFile = path.parse(`${dir}/${testFile_UHD}.txt`);
+            destinationFile = path.parse(success.destination);
+
+            const {
+                charged,
+                dimensions,
+                detected,
+                size
+            } = success;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                size
+            }).to.deep.equal({
+                charged: 8,
+                dimensions: '3750x2500',
+                detected: 'person',
+                size: '4k'
+            });
+
+        });
+
+        it('destination file should not be resized', () => {
+            expect(success.resized).to.be.false;
+        });
+
+        it('source and destination paths should match', () => {
+            expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_UHD}.txt`));
+        });
+
+        it('should save new image in source\'s original directory', async () => {
+            const product = await common.currentFile(success.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: success.destination
+            });
+        });
+
+        it('source and destinaton file names should not match with id added to destinaton filename', () => {
+            const deconstructed = destinationFile.name.split('-');
+            const id = deconstructed.pop();
+            expect(sourceFile.dir + `/${sourceFile.name}`).to.equal(destinationFile.dir + `/${deconstructed.join('-')}`);
+            expect(id).to.have.lengthOf(9);
+        });
+
+        it('source and destinaton extensions should match', async () => {
+            expect(sourceFile.ext).to.equal(destinationFile.ext);
+            await unlink(success.destination);
+        });
+
+    });
+
+    context('with correct source and image without persons and progress enabled', () => {
+
+        let out = {};
+        let success = {};
+        let sourceFile = {};
+        let destinationFile = {};
+        let done = [];
+        let progress = [];
+        let files = [];
+
+        it('should return list of processed images', async () => {
+
+            await del([`${dir}/*.png`]);
+
+            const batch = await removd.base64({
+                progress: true,
+                source: [
+                    `${dir}/${testFile_LQ}-green.jpg`,
+                    `${dir}/${testFile_MQ}.jpg`,
+                    `${dir}/${testFile_HQ}.txt`,
+                    `${dir}/${testFile_LQ}-url.txt`,
+                    `${dir}/${testFile_UHD}.txt`
+                ]
+            });
+
+            files = batch.files;
+
+            batch.progress.on('item', item => {
+                progress.push(item);
+            });
+
+            done = await batch.init();
+
+            expect(done).to.be.an('array').to.have.lengthOf(5);
+
+        });
+
+        it('should return list of files to be processed', () => {
+
+            expect(files).to.be.an('array').to.have.lengthOf(5);
+
+        });
+
+        it('progress should return successfully processed list of images', () => {
+
+            expect(progress).to.be.an('array').to.have.lengthOf(5);
+
+            expect(done).to.deep.equal(progress);
+
+        });
+
+        it('should return no persons found error for one of the images', () => {
+
+            out = done.filter(item => item.error).shift();
+
+            expect(out).to.deep.equal({
+                error: 'Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.',
+                source: `${dir}/${testFile_LQ}-green.jpg`
+            });
+
+        });
+
+        it('should return successfully processed image for medium quality image', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 

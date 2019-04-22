@@ -18,7 +18,7 @@ const dir = path.resolve(__dirname, '../assets/');
 
 const unlink = util.promisify(fs.unlink);
 
-describe('# service API file workflow test', () => {
+describe('# file workflow service API', () => {
 
     const recorder = record(path.parse(__filename).name);
 
