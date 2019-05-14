@@ -1792,6 +1792,8 @@ describe('# base64 workflow service API', () => {
                 source: testFile
             });
 
+            console.dir(outcome);
+
             expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(testFile);
@@ -1888,6 +1890,8 @@ describe('# base64 workflow service API', () => {
                 preserve: true,
                 source: testFile
             });
+
+            console.dir(outcome);
 
             expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
@@ -1987,6 +1991,8 @@ describe('# base64 workflow service API', () => {
                 preserve: true,
                 source: testFile
             });
+
+            console.dir(outcome);
 
             expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
