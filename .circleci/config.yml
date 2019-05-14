@@ -16,6 +16,9 @@ jobs:
       - run:
           name: install-packages
           command: npm install
+      - run:
+          name: rebuild
+          command: npm rebuild
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -39,6 +42,9 @@ jobs:
       - run:
           name: install-packages
           command: npm install
+      - run:
+          name: rebuild
+          command: npm rebuild
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -62,6 +68,9 @@ jobs:
       - run:
           name: install-packages
           command: npm install
+      - run:
+          name: rebuild
+          command: npm rebuild
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
