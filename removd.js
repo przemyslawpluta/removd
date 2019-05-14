@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const once = require('./lib/once');
 const batch = require('./lib/batch');
+const balance = require('./lib/balance');
 
 function check(workflow, options) {
 
@@ -11,6 +12,10 @@ function check(workflow, options) {
         return {
             error: 'Missing remove.bg service API key'
         };
+    }
+
+    if (workflow === 'account') {
+        return balance(options);
     }
 
     if (!options) {
@@ -48,8 +53,13 @@ function base64(options) {
     return check(arguments.callee.name, options);
 }
 
+function account(options) {
+    return check(arguments.callee.name, options);
+}
+
 module.exports = {
     file,
     url,
-    base64
+    base64,
+    account
 };

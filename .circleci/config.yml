@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-node10:
     docker:
       - image: circleci/node:10.15.3
         environment:
@@ -23,3 +23,57 @@ jobs:
       - run:
           name: test
           command: npm test
+  build-node11:
+    docker:
+      - image: circleci/node:11.15.0
+        environment:
+          REMOVD_API_KEY: 273ebebd6946ab335c605cdb
+          REMOVD_ISFILE_DELAY: "500"
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@latest"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: npm test
+  build-node12:
+    docker:
+      - image: circleci/node:12.2.0
+        environment:
+          REMOVD_API_KEY: 273ebebd6946ab335c605cdb
+          REMOVD_ISFILE_DELAY: "500"
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@latest"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: npm test
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-node10
+      - build-node11
+      - build-node12

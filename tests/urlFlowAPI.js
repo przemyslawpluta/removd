@@ -8,12 +8,17 @@ const common = require('../lib/common');
 const testFile = 'https://images.unsplash.com/photo-1504455583697-3a9b04be6397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=';
 const testFileProduct1 = "https://images.unsplash.com/photo-1544441892-794166f1e3be?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=";
 const testFileProduct2 = "https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=";
+const testFileCar1 = "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=";
+const testFileCar2 = "https://images.unsplash.com/photo-1507722661946-ec4abdfe6a1e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=";
 const testFile_LQ = `${testFile}400&q=80`;
 const testFileProduct_LQ = `${testFileProduct1}400&q=80`;
+const testFileCar_LQ = `${testFileCar1}400&q=80`;
 const testFile_MQ = `${testFile}1500&q=80`;
 const testFileProduct_MQ = `${testFileProduct2}1029&q=80`;
+const testFileCar_MQ = `${testFileCar2}1400&q=80`;
 const testFile_HQ = `${testFile}2400&q=80`;
 const testFile_UHD = `${testFile}3750&q=80`;
+const testFile_5k = `${testFile}5184&q=80`;
 const testFile_LQ_green = 'https://images.unsplash.com/photo-1496769336828-c522a3a7e33c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80';
 const targetName = 'unsplash-photo';
 const dir = path.resolve(__dirname, `../assets/`);
@@ -43,7 +48,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with person and size autodetected', () => {
+    context('with correct source and destination a small image with person and size autodetected', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -56,7 +61,7 @@ describe('# url workflow service API', () => {
                 source: testFile_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -64,11 +69,12 @@ describe('# url workflow service API', () => {
 
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -76,12 +82,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -98,7 +106,7 @@ describe('# url workflow service API', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -116,7 +124,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with person, size autodetected and alpha channels', () => {
+    context('with correct source and destination a small image with person, size autodetected and alpha channels', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -130,7 +138,7 @@ describe('# url workflow service API', () => {
                 source: testFile_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -138,11 +146,12 @@ describe('# url workflow service API', () => {
 
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -150,12 +159,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -172,7 +183,7 @@ describe('# url workflow service API', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -190,7 +201,160 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with person and size set to auto and detect set', () => {
+    context('with correct source and destination a small image with car, size autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                detect: 'car',
+                destination: dir,
+                source: testFileCar_LQ
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+
+            const url = new URL(testFileCar_LQ);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('outcome should be small and charged 1 credit', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            }).to.deep.equal({
+                charged: 1,
+                dimensions: '400x267',
+                detected: 'car',
+                preserved: true,
+                size: 'small'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('saved small image should be 400x267', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 400,
+                height: 267
+            });
+            await del([`${dir}/*.png`]);
+        });
+
+    });
+
+    context('with correct source and destination a medium image with car autodetected, size autodetected', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                destination: dir,
+                source: testFileCar_MQ
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+
+            const url = new URL(testFileCar_MQ);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('outcome should be medium and charged 3 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            }).to.deep.equal({
+                charged: 3,
+                dimensions: '1400x1000',
+                detected: 'car',
+                preserved: true,
+                size: 'medium'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('saved medium image should be 1400x1000', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 1400,
+                height: 1000
+            });
+            await del([`${dir}/*.png`]);
+        });
+
+    });
+
+    context('with correct source and destination a small image with person and size set to auto and detect set', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -205,7 +369,7 @@ describe('# url workflow service API', () => {
                 source: testFile_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -213,11 +377,12 @@ describe('# url workflow service API', () => {
 
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -225,11 +390,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -247,7 +414,7 @@ describe('# url workflow service API', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -264,7 +431,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with product and size autodetected', () => {
+    context('with correct source and destination a small image with product and size autodetected', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -277,7 +444,7 @@ describe('# url workflow service API', () => {
                 source: testFileProduct_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFileProduct_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -285,11 +452,12 @@ describe('# url workflow service API', () => {
 
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -297,12 +465,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'product',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -319,7 +489,7 @@ describe('# url workflow service API', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -352,7 +522,7 @@ describe('# url workflow service API', () => {
                 source: testFileProduct_MQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFileProduct_MQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -365,6 +535,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -372,11 +543,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '1029x1543',
                 detected: 'product',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -433,7 +606,7 @@ describe('# url workflow service API', () => {
                 source: testFileProduct_MQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFileProduct_MQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -446,6 +619,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -453,11 +627,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '1029x1543',
                 detected: 'product',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -513,7 +689,7 @@ describe('# url workflow service API', () => {
                 source: testFileProduct_MQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFileProduct_MQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -526,6 +702,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -533,11 +710,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '1029x1543',
                 detected: 'product',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -592,7 +771,7 @@ describe('# url workflow service API', () => {
                 source: testFileProduct_MQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFileProduct_MQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -605,6 +784,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -612,11 +792,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '1029x1543',
                 detected: 'product',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -655,7 +837,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with person and filename bumped and size autodetected', () => {
+    context('with correct source and destination a small image with person and filename bumped and size autodetected', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -669,7 +851,7 @@ describe('# url workflow service API', () => {
                 source: testFile_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -681,11 +863,12 @@ describe('# url workflow service API', () => {
             expect(outcome.resized).to.be.false;
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -693,12 +876,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -718,7 +903,7 @@ describe('# url workflow service API', () => {
             expect(id).to.have.lengthOf(9);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -736,7 +921,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a regular image with person and set name and size autodetected', () => {
+    context('with correct source and destination a small image with person and set name and size autodetected', () => {
 
         let outcome = {};
         let destinationFile = {};
@@ -748,7 +933,7 @@ describe('# url workflow service API', () => {
                 source: testFile_LQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             destinationFile = path.parse(outcome.destination);
 
@@ -758,11 +943,12 @@ describe('# url workflow service API', () => {
             expect(outcome.resized).to.be.false;
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -770,12 +956,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -792,7 +980,7 @@ describe('# url workflow service API', () => {
             expect(`${destinationFile.name}`).to.equal(`${targetName}`);
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -824,7 +1012,7 @@ describe('# url workflow service API', () => {
                 source: testFile_MQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_MQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -841,6 +1029,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -848,11 +1037,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -888,7 +1079,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination an hd image with person and size forced to regular', () => {
+    context('with correct source and destination an hd image with person and size forced to small', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -897,12 +1088,12 @@ describe('# url workflow service API', () => {
         it('should return object', async () => {
 
             outcome = await removd.url({
-                size: 'regular',
+                size: 'small',
                 destination: dir,
                 source: testFile_HQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_HQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -914,11 +1105,12 @@ describe('# url workflow service API', () => {
             expect(outcome.resized).to.be.true;
         });
 
-        it('outcome should be regular and charged 1 credit', () => {
+        it('outcome should be small and charged 1 credit', () => {
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -926,12 +1118,14 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '612x408',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -948,7 +1142,7 @@ describe('# url workflow service API', () => {
             expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
         });
 
-        it('saved regular image should be 612x408', async () => {
+        it('saved small image should be 612x408', async () => {
             const {
                 width,
                 height
@@ -980,7 +1174,7 @@ describe('# url workflow service API', () => {
                 source: testFile_HQ
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_HQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -997,6 +1191,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -1004,11 +1199,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -1058,7 +1255,7 @@ describe('# url workflow service API', () => {
                 source: testFile_UHD
             });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const url = new URL(testFile_UHD);
             sourceFile = path.parse(url.pathname.split('/').pop());
@@ -1075,6 +1272,7 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = outcome;
 
@@ -1082,11 +1280,13 @@ describe('# url workflow service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 
@@ -1116,6 +1316,167 @@ describe('# url workflow service API', () => {
             }).to.deep.equal({
                 width: 3750,
                 height: 2500
+            });
+            await del([`${dir}/*.png`]);
+        });
+
+    });
+
+    context('with correct source and destination a 5k image with person', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                destination: dir,
+                source: testFile_5k
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+
+            const url = new URL(testFile_5k);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('destination file should be resized', () => {
+            expect(outcome.resized).to.be.true;
+        });
+
+        it('outcome should be 4k and charged 8 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            }).to.deep.equal({
+                charged: 8,
+                dimensions: '3873x2582',
+                detected: 'person',
+                preserved: false,
+                size: '4k'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('saved 4k image should be 3873x2582', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 3873,
+                height: 2582
+            });
+            await del([`${dir}/*.png`]);
+        });
+
+    });
+
+    context('with correct source and destination a 5k image with person but resolution preserved', () => {
+
+        let outcome = {};
+        let sourceFile = {};
+        let destinationFile = {};
+
+        it('should return object', async () => {
+
+            outcome = await removd.url({
+                preserve: true,
+                destination: dir,
+                source: testFile_5k
+            });
+
+            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+
+            const url = new URL(testFile_5k);
+            sourceFile = path.parse(url.pathname.split('/').pop());
+            destinationFile = path.parse(outcome.destination);
+
+        });
+
+        it('destination file should be resized', () => {
+            expect(outcome.resized).to.be.true;
+        });
+
+        it('outcome should be 4k and charged 8 credits', () => {
+            const {
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            } = outcome;
+
+            expect({
+                charged,
+                dimensions,
+                detected,
+                preserved,
+                size
+            }).to.deep.equal({
+                charged: 8,
+                dimensions: '5184x3456',
+                detected: 'person',
+                preserved: true,
+                size: '4k'
+            });
+
+        });
+
+        it('should save new image in destination directory', async () => {
+            const product = await common.currentFile(outcome.destination);
+            expect(product).to.deep.equal({
+                exists: true,
+                source: outcome.destination
+            });
+        });
+
+        it('source and destinaton file names should match', () => {
+            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+        });
+
+        it('saved 5k image should be 5184x3456', async () => {
+            const {
+                width,
+                height
+            } = await common.getDimensions(outcome.destination);
+
+            expect({
+                width,
+                height
+            }).to.deep.equal({
+                width: 5184,
+                height: 3456
             });
             await del([`${dir}/*.png`]);
         });

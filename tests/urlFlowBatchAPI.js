@@ -52,19 +52,20 @@ describe('# url workflow batch service API', () => {
 
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -72,12 +73,14 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -90,7 +93,7 @@ describe('# url workflow batch service API', () => {
             });
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -112,12 +115,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -125,11 +129,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -172,12 +178,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -185,11 +192,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -232,12 +241,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -245,11 +255,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 
@@ -348,19 +360,20 @@ describe('# url workflow batch service API', () => {
 
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             url = new URL(testFile_LQ);
             sourceFile = path.parse(url.pathname.split('/').pop());
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -368,12 +381,14 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -386,7 +401,7 @@ describe('# url workflow batch service API', () => {
             });
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -408,12 +423,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -421,11 +437,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -468,12 +486,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -481,11 +500,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -528,12 +549,13 @@ describe('# url workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -541,11 +563,13 @@ describe('# url workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 

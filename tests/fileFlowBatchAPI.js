@@ -54,12 +54,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -67,12 +68,14 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -85,7 +88,7 @@ describe('# file workflow batch service batch API', () => {
             expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}.jpg`));
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -126,16 +129,17 @@ describe('# file workflow batch service batch API', () => {
 
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -143,11 +147,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -161,7 +167,7 @@ describe('# file workflow batch service batch API', () => {
             expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}.jpg`));
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -180,12 +186,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -193,11 +200,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -230,12 +239,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -243,11 +253,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -280,12 +292,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -293,11 +306,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -361,16 +376,17 @@ describe('# file workflow batch service batch API', () => {
 
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_LQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -378,12 +394,14 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -396,7 +414,7 @@ describe('# file workflow batch service batch API', () => {
             expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}.jpg`));
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -411,16 +429,17 @@ describe('# file workflow batch service batch API', () => {
             });
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_LQ}-tag.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -428,12 +447,14 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -446,7 +467,7 @@ describe('# file workflow batch service batch API', () => {
             expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}-tag.jpg`));
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -465,12 +486,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_MQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -478,11 +500,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -515,12 +539,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_HQ}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -528,11 +553,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -565,12 +592,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.destination === `${dir}/${testFile_UHD}.png`).shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -578,11 +606,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 
@@ -687,16 +717,17 @@ describe('# file workflow batch service batch API', () => {
 
         });
 
-        it('should return successfully processed regular image', () => {
+        it('should return successfully processed small image', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -704,11 +735,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -722,7 +755,7 @@ describe('# file workflow batch service batch API', () => {
             expect(path.dirname(success.destination)).to.equal(path.dirname(`${dir}/${testFile_LQ}.jpg`));
         });
 
-        it('saved regular image should be 400x267', async () => {
+        it('saved small image should be 400x267', async () => {
             const {
                 width,
                 height
@@ -741,12 +774,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -754,11 +788,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -791,12 +827,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -804,11 +841,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 
@@ -841,12 +880,13 @@ describe('# file workflow batch service batch API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -854,11 +894,13 @@ describe('# file workflow batch service batch API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: 'auto'
             });
 

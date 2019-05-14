@@ -1,51 +1,6 @@
-const fs = require('fs');
-const util = require('util');
 const path = require('path');
-const validDataUrl = require('valid-data-url');
-const isBase64 = require('is-base64');
 const common = require('../lib/common');
-const read = util.promisify(fs.readFile);
-
-async function b64Flow(source) {
-    let file = await read(source, {
-        encoding: 'utf8'
-    });
-
-    file = file.toString().trim();
-
-    const dataurl = validDataUrl(file);
-
-    if (dataurl) {
-        file = file.substring(file.indexOf(',') + 1);
-    }
-
-    if (!isBase64(file)) {
-        return {
-            error: 'Not a valid base64 file',
-            source
-        };
-    }
-
-    return {
-        file,
-        dataurl
-    };
-}
-
-async function imgFlow(source) {
-    const file = await read(source, {
-        encoding: 'base64'
-    });
-
-    if (!isBase64(file)) {
-        return {
-            error: 'Not a valid base64 file',
-            source
-        };
-    }
-
-    return file;
-}
+const image = require('../lib/image');
 
 async function base64Workflow(options) {
 
@@ -62,62 +17,20 @@ async function base64Workflow(options) {
         };
     }
 
-    const resizedFile = path.parse(options.source);
+    const resource = await image.validate(options, arguments.callee.name);
 
-    if (!common.supportedFiles(resizedFile.ext, ['.txt'])) {
+    if (resource.error) {
         return {
-            error: 'Unsupported file format',
+            ...resource,
             source: options.source
         };
     }
 
-    let dim = await common.getDimensions(options.source);
-
-    let image_file_b64 = null;
-    let b64DataFlow = false;
-    let b64StringFlow = false;
-    let original = null;
     const b64ToImage = (options.toImage) ? true : false;
 
-    if (dim.error && dim.error.indexOf('unsupported file type') === 0 && resizedFile.ext === '.txt') {
-        b64StringFlow = true;
-        const file_b64 = await b64Flow(options.source);
-        if (file_b64.error) {
-            return {
-                error: file_b64.error
-            };
-        }
-        image_file_b64 = file_b64.file || file_b64;
-        dim = await common.getDimensions(Buffer.from(image_file_b64, 'base64'));
-        if (dim.error) {
-            return {
-                error: dim.error
-            };
-        }
-        original = [dim.width, dim.height];
-        if (file_b64.dataurl) {
-            b64DataFlow = file_b64.dataurl;
-        }
-    } else {
-        if (!common.supportedFiles(resizedFile.ext)) {
-            return {
-                error: 'Unsupported file format',
-                source: options.source
-            };
-        }
-        image_file_b64 = await imgFlow(options.source);
-        original = [dim.width, dim.height];
-    }
-
-    if (image_file_b64.error) {
-        return {
-            error: image_file_b64.error
-        };
-    }
-
     const formData = {
-        image_file_b64,
-        size: dim.size,
+        image_file_b64: resource.file,
+        size: resource.detail.size,
         channels: 'rgba',
         bg_color: '00000000',
         format: 'auto',
@@ -130,9 +43,11 @@ async function base64Workflow(options) {
         return validate.shift();
     }
 
+    const resizedFile = path.parse(options.source);
+
     let file = null;
     let checkDestination = null;
-    const assignExt = ((b64StringFlow && !b64ToImage) ? resizedFile.ext : '.png');
+    const assignExt = ((resource.detail.ext === '.txt' && !b64ToImage) ? resizedFile.ext : '.png');
 
     if (!options.destination) {
         options.destination = resizedFile.dir;
@@ -151,21 +66,14 @@ async function base64Workflow(options) {
     }
 
     const cutOutName = (file) ? file.name : resizedFile.name + assignExt;
-    let destination = path.resolve(options.destination) + `/${cutOutName}`;
 
-    const out = {
+    return {
         formData,
-        destination,
-        b64ToImage,
-        b64DataFlow,
-        b64StringFlow
+        detail: resource.detail,
+        destination: path.resolve(options.destination) + `/${cutOutName}`,
+        b64ToImage
     };
 
-    if (original) {
-        out.original = original;
-    }
-
-    return out;
 }
 
 module.exports = base64Workflow;

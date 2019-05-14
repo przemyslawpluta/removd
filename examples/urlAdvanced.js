@@ -3,7 +3,7 @@ const removd = require('../removd');
 (async () => {
 
     const done = await removd.url({
-        size: 'regular',
+        size: 'small',
         detect: 'person',
         channels: 'alpha',
         background: '81d4fa77',

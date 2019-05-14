@@ -5,7 +5,7 @@ const record = require('./record');
 
 const testFileSource = 'https://images.unsplash.com/';
 const testFileName = 'photo-1504455583697';
-const testFile_LQ = testFileSource + testFileName + '-3a9b04be6397?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80';
+const testFile_LQ = testFileSource + testFileName + '-3a9b04be6397?auto=format&fit=crop&w=400&q=80';
 const dir = path.resolve(__dirname, `../assets/`);
 
 describe('# url workflow', () => {
@@ -161,7 +161,7 @@ describe('# url workflow', () => {
             });
 
             expect(done).to.deep.equal({
-                error: 'Not Found',
+                error: 'Unsupported file format',
                 source: testFileSource + testFileName
             });
 
@@ -183,7 +183,7 @@ describe('# url workflow', () => {
                 error: "Unsupported file format",
                 source: testFileSource
             }, {
-                error: "Not Found",
+                error: "Unsupported file format",
                 source: testFileSource + testFileName
             }]));
 

@@ -1,9 +1,6 @@
-const fs = require('fs');
-const util = require('util');
 const path = require('path');
 const common = require('../lib/common');
-
-const read = util.promisify(fs.readFile);
+const image = require('../lib/image');
 
 async function fileWorkflow(options) {
 
@@ -20,22 +17,18 @@ async function fileWorkflow(options) {
         };
     }
 
-    const resizedFile = path.parse(options.source);
+    const resource = await image.validate(options, arguments.callee.name);
 
-    if (!common.supportedFiles(resizedFile.ext)) {
+    if (resource.error) {
         return {
-            error: 'Unsupported file format',
+            ...resource,
             source: options.source
         };
     }
 
-    const dim = await common.getDimensions(options.source);
-
     const formData = {
-        image_file_b64: await read(options.source, {
-            encoding: 'base64'
-        }),
-        size: dim.size,
+        image_file_b64: resource.file,
+        size: resource.detail.size,
         channels: 'rgba',
         bg_color: '00000000',
         format: 'auto',
@@ -50,6 +43,7 @@ async function fileWorkflow(options) {
 
     let file = null;
     let checkDestination = null;
+    const resizedFile = path.parse(options.source);
 
     if (!options.destination) {
         options.destination = resizedFile.dir;
@@ -68,15 +62,13 @@ async function fileWorkflow(options) {
     }
 
     const cutOutName = (file) ? file.name : resizedFile.name + '.png';
-    const destination = path.resolve(options.destination) + `/${cutOutName}`;
 
-    const out = {
+    return {
         formData,
-        original: [dim.width, dim.height],
-        destination
+        detail: resource.detail,
+        destination: path.resolve(options.destination) + `/${cutOutName}`
     };
 
-    return out;
 }
 
 module.exports = fileWorkflow;

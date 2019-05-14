@@ -1,5 +1,6 @@
 const path = require('path');
 const common = require('../lib/common');
+const image = require('../lib/image');
 
 async function urlWorkflow(options) {
 
@@ -52,8 +53,6 @@ async function urlWorkflow(options) {
         };
     }
 
-    let original = null;
-
     const formData = {
         image_url: url.href,
         channels: 'rgba',
@@ -68,31 +67,25 @@ async function urlWorkflow(options) {
         return validate.shift();
     }
 
-    const dim = await common.getDimensionsUrl(options.source);
+    const resource = await image.validate(options, arguments.callee.name);
 
-    if (dim.error) {
-        return dim;
+    if (resource.error) {
+        return {
+            ...resource,
+            source: options.source
+        };
     }
-
-    original = [dim.width, dim.height];
 
     if (!formData.size) {
-        formData.size = dim.size;
+        formData.size = resource.detail.size;
     }
 
-    const cutOutName = file.name;
-    let destination = checkDestination.dir + '/' + cutOutName;
-
-    let out = {
+    return {
         formData,
-        destination
+        destination: checkDestination.dir + '/' + file.name,
+        detail: resource.detail
     };
 
-    if (original) {
-        out.original = original;
-    }
-
-    return out;
 }
 
 module.exports = urlWorkflow;

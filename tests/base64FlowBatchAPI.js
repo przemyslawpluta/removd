@@ -62,12 +62,13 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -75,11 +76,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -109,11 +112,11 @@ describe('# base64 workflow batch service API', () => {
             await del([`${dir}/*.png`]);
         });
 
-        it('outcome should be regular url encoded image and charged 1 credit', () => {
+        it('outcome should be small url encoded image and charged 1 credit', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_LQ}-url.txt`);
             destinationFile = path.parse(success.destination);
@@ -122,6 +125,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -129,12 +133,14 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -171,7 +177,7 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_HQ}.txt`);
             destinationFile = path.parse(success.destination);
@@ -180,6 +186,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -187,11 +194,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -229,7 +238,7 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_UHD}.txt`);
             destinationFile = path.parse(success.destination);
@@ -238,6 +247,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -245,11 +255,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 
@@ -351,12 +363,13 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '1500x1000').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             const {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -364,11 +377,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 3,
                 dimensions: '1500x1000',
                 detected: 'person',
+                preserved: true,
                 size: 'medium'
             });
 
@@ -398,11 +413,11 @@ describe('# base64 workflow batch service API', () => {
             await del([`${dir}/*.png`]);
         });
 
-        it('outcome should be regular url encoded image and charged 1 credit', () => {
+        it('outcome should be small url encoded image and charged 1 credit', () => {
 
             success = done.filter(item => item.dimensions === '400x267').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_LQ}-url.txt`);
             destinationFile = path.parse(success.destination);
@@ -411,6 +426,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -418,12 +434,14 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 1,
                 dimensions: '400x267',
                 detected: 'person',
-                size: 'regular'
+                preserved: true,
+                size: 'small'
             });
 
         });
@@ -460,7 +478,7 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '2400x1600').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_HQ}.txt`);
             destinationFile = path.parse(success.destination);
@@ -469,6 +487,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -476,11 +495,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 5,
                 dimensions: '2400x1600',
                 detected: 'person',
+                preserved: true,
                 size: 'hd'
             });
 
@@ -518,7 +539,7 @@ describe('# base64 workflow batch service API', () => {
 
             success = done.filter(item => item.dimensions === '3750x2500').shift();
 
-            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected');
+            expect(success).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
             sourceFile = path.parse(`${dir}/${testFile_UHD}.txt`);
             destinationFile = path.parse(success.destination);
@@ -527,6 +548,7 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             } = success;
 
@@ -534,11 +556,13 @@ describe('# base64 workflow batch service API', () => {
                 charged,
                 dimensions,
                 detected,
+                preserved,
                 size
             }).to.deep.equal({
                 charged: 8,
                 dimensions: '3750x2500',
                 detected: 'person',
+                preserved: true,
                 size: '4k'
             });
 
