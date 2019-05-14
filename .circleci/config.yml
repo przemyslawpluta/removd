@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:10.15.3
         environment:
           REMOVD_API_KEY: 273ebebd6946ab335c605cdb
-          REMOVD_ISFILE_DELAY: "500"
+          REMOVD_ISFILE_DELAY: "1000"
     steps:
       - checkout
       - run:
@@ -28,7 +28,7 @@ jobs:
       - image: circleci/node:11.15.0
         environment:
           REMOVD_API_KEY: 273ebebd6946ab335c605cdb
-          REMOVD_ISFILE_DELAY: "500"
+          REMOVD_ISFILE_DELAY: "1000"
     steps:
       - checkout
       - run:
@@ -51,7 +51,7 @@ jobs:
       - image: circleci/node:12.2.0
         environment:
           REMOVD_API_KEY: 273ebebd6946ab335c605cdb
-          REMOVD_ISFILE_DELAY: "500"
+          REMOVD_ISFILE_DELAY: "1000"
     steps:
       - checkout
       - run:
