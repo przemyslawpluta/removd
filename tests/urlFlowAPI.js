@@ -1322,166 +1322,166 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a 5k image with person', () => {
+    // context('with correct source and destination a 5k image with person', () => {
 
-        let outcome = {};
-        let sourceFile = {};
-        let destinationFile = {};
+    //     let outcome = {};
+    //     let sourceFile = {};
+    //     let destinationFile = {};
 
-        it('should return object', async () => {
+    //     it('should return object', async () => {
 
-            outcome = await removd.url({
-                destination: dir,
-                source: testFile_5k
-            });
+    //         outcome = await removd.url({
+    //             destination: dir,
+    //             source: testFile_5k
+    //         });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+    //         expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
-            const url = new URL(testFile_5k);
-            sourceFile = path.parse(url.pathname.split('/').pop());
-            destinationFile = path.parse(outcome.destination);
+    //         const url = new URL(testFile_5k);
+    //         sourceFile = path.parse(url.pathname.split('/').pop());
+    //         destinationFile = path.parse(outcome.destination);
 
-        });
+    //     });
 
-        it('destination file should be resized', () => {
-            expect(outcome.resized).to.be.true;
-        });
+    //     it('destination file should be resized', () => {
+    //         expect(outcome.resized).to.be.true;
+    //     });
 
-        it('outcome should be 4k and charged 8 credits', () => {
-            const {
-                charged,
-                dimensions,
-                detected,
-                preserved,
-                size
-            } = outcome;
+    //     it('outcome should be 4k and charged 8 credits', () => {
+    //         const {
+    //             charged,
+    //             dimensions,
+    //             detected,
+    //             preserved,
+    //             size
+    //         } = outcome;
 
-            expect({
-                charged,
-                dimensions,
-                detected,
-                preserved,
-                size
-            }).to.deep.equal({
-                charged: 8,
-                dimensions: '3873x2582',
-                detected: 'person',
-                preserved: false,
-                size: '4k'
-            });
+    //         expect({
+    //             charged,
+    //             dimensions,
+    //             detected,
+    //             preserved,
+    //             size
+    //         }).to.deep.equal({
+    //             charged: 8,
+    //             dimensions: '3873x2582',
+    //             detected: 'person',
+    //             preserved: false,
+    //             size: '4k'
+    //         });
 
-        });
+    //     });
 
-        it('should save new image in destination directory', async () => {
-            const product = await common.currentFile(outcome.destination);
-            expect(product).to.deep.equal({
-                exists: true,
-                source: outcome.destination
-            });
-        });
+    //     it('should save new image in destination directory', async () => {
+    //         const product = await common.currentFile(outcome.destination);
+    //         expect(product).to.deep.equal({
+    //             exists: true,
+    //             source: outcome.destination
+    //         });
+    //     });
 
-        it('source and destinaton file names should match', () => {
-            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
-        });
+    //     it('source and destinaton file names should match', () => {
+    //         expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+    //     });
 
-        it('saved 4k image should be 3873x2582', async () => {
-            const {
-                width,
-                height
-            } = await common.getDimensions(outcome.destination);
+    //     it('saved 4k image should be 3873x2582', async () => {
+    //         const {
+    //             width,
+    //             height
+    //         } = await common.getDimensions(outcome.destination);
 
-            expect({
-                width,
-                height
-            }).to.deep.equal({
-                width: 3873,
-                height: 2582
-            });
-            await del([`${dir}/*.png`]);
-        });
+    //         expect({
+    //             width,
+    //             height
+    //         }).to.deep.equal({
+    //             width: 3873,
+    //             height: 2582
+    //         });
+    //         await del([`${dir}/*.png`]);
+    //     });
 
-    });
+    // });
 
-    context('with correct source and destination a 5k image with person but resolution preserved', () => {
+    // context('with correct source and destination a 5k image with person but resolution preserved', () => {
 
-        let outcome = {};
-        let sourceFile = {};
-        let destinationFile = {};
+    //     let outcome = {};
+    //     let sourceFile = {};
+    //     let destinationFile = {};
 
-        it('should return object', async () => {
+    //     it('should return object', async () => {
 
-            outcome = await removd.url({
-                preserve: true,
-                destination: dir,
-                source: testFile_5k
-            });
+    //         outcome = await removd.url({
+    //             preserve: true,
+    //             destination: dir,
+    //             source: testFile_5k
+    //         });
 
-            expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
+    //         expect(outcome).to.be.an('object').that.has.all.keys('charged', 'size', 'duration', 'dimensions', 'destination', 'resized', 'detected', 'preserved');
 
-            const url = new URL(testFile_5k);
-            sourceFile = path.parse(url.pathname.split('/').pop());
-            destinationFile = path.parse(outcome.destination);
+    //         const url = new URL(testFile_5k);
+    //         sourceFile = path.parse(url.pathname.split('/').pop());
+    //         destinationFile = path.parse(outcome.destination);
 
-        });
+    //     });
 
-        it('destination file should be resized', () => {
-            expect(outcome.resized).to.be.true;
-        });
+    //     it('destination file should be resized', () => {
+    //         expect(outcome.resized).to.be.true;
+    //     });
 
-        it('outcome should be 4k and charged 8 credits', () => {
-            const {
-                charged,
-                dimensions,
-                detected,
-                preserved,
-                size
-            } = outcome;
+    //     it('outcome should be 4k and charged 8 credits', () => {
+    //         const {
+    //             charged,
+    //             dimensions,
+    //             detected,
+    //             preserved,
+    //             size
+    //         } = outcome;
 
-            expect({
-                charged,
-                dimensions,
-                detected,
-                preserved,
-                size
-            }).to.deep.equal({
-                charged: 8,
-                dimensions: '5184x3456',
-                detected: 'person',
-                preserved: true,
-                size: '4k'
-            });
+    //         expect({
+    //             charged,
+    //             dimensions,
+    //             detected,
+    //             preserved,
+    //             size
+    //         }).to.deep.equal({
+    //             charged: 8,
+    //             dimensions: '5184x3456',
+    //             detected: 'person',
+    //             preserved: true,
+    //             size: '4k'
+    //         });
 
-        });
+    //     });
 
-        it('should save new image in destination directory', async () => {
-            const product = await common.currentFile(outcome.destination);
-            expect(product).to.deep.equal({
-                exists: true,
-                source: outcome.destination
-            });
-        });
+    //     it('should save new image in destination directory', async () => {
+    //         const product = await common.currentFile(outcome.destination);
+    //         expect(product).to.deep.equal({
+    //             exists: true,
+    //             source: outcome.destination
+    //         });
+    //     });
 
-        it('source and destinaton file names should match', () => {
-            expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
-        });
+    //     it('source and destinaton file names should match', () => {
+    //         expect(`${sourceFile.name}`).to.equal(`${destinationFile.name}`);
+    //     });
 
-        it('saved 5k image should be 5184x3456', async () => {
-            const {
-                width,
-                height
-            } = await common.getDimensions(outcome.destination);
+    //     it('saved 5k image should be 5184x3456', async () => {
+    //         const {
+    //             width,
+    //             height
+    //         } = await common.getDimensions(outcome.destination);
 
-            expect({
-                width,
-                height
-            }).to.deep.equal({
-                width: 5184,
-                height: 3456
-            });
-            await del([`${dir}/*.png`]);
-        });
+    //         expect({
+    //             width,
+    //             height
+    //         }).to.deep.equal({
+    //             width: 5184,
+    //             height: 3456
+    //         });
+    //         await del([`${dir}/*.png`]);
+    //     });
 
-    });
+    // });
 
     after(recorder.after);
 
