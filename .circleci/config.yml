@@ -84,5 +84,5 @@ workflows:
   build:
     jobs:
       - build-node10
-      # - build-node11
-      # - build-node12
+      - build-node11
+      - build-node12
