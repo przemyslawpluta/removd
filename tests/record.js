@@ -51,6 +51,7 @@ module.exports = (name, options) => {
                 const text = "const nock = require('nock');\nnock.disableNetConnect();\n" + fixtures.join('\n');
                 fs.writeFile(fp, text, done);
             } else {
+                nock.cleanAll();
                 done();
             }
         }
