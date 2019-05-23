@@ -4,6 +4,7 @@ const removd = require('../removd');
 
     const batch = await removd.file({
         glob: true,
+        preserve: true,
         progress: true,
         source: [
             '/directory/*.jpg'

@@ -4,11 +4,11 @@
   "description": "automatic ai cut outs of people, products and cars with remove.bg service",
   "main": "removd.js",
   "scripts": {
-    "test": "mocha --timeout 0 tests/account*.js tests/fileFlow*.js tests/base64Flow*.js tests/urlFlow*.js",
+    "test": "mocha --timeout 0 tests/accountFlow.js tests/fileFlow*.js tests/base64Flow*.js tests/urlFlow*.js",
     "test:preserve": "mocha --timeout 0 tests/filePreserve*.js tests/base64Preserve*.js tests/urlPreserve*.js",
-    "test:file": "mocha --timeout 0 tests/file*.js",
-    "test:base64": "mocha --timeout 0 tests/base64*.js",
-    "test:url": "mocha --timeout 0 tests/url*.js",
+    "test:file": "mocha --timeout 0 tests/fileFlow*.js",
+    "test:base64": "mocha --timeout 0 tests/base64Flow*.js",
+    "test:url": "mocha --timeout 0 tests/urlFlow*.js",
     "test:account": "mocha --timeout 0 tests/account*.js",
     "start": "node removd.js"
   },
@@ -60,6 +60,7 @@
     "dotenv": "^8.0.0",
     "globby": "^9.2.0",
     "hex-rgb": "^4.1.0",
+    "merge2": "^1.2.3",
     "mime": "^2.4.3",
     "node-fetch": "^2.6.0",
     "pretty-hrtime": "^1.0.3",
@@ -68,12 +69,14 @@
     "round-to": "^4.0.0",
     "sharp": "^0.22.1",
     "shortid": "^2.2.14",
-    "valid-data-url": "^1.0.0"
+    "strip-bom-stream": "^4.0.0",
+    "uuid": "^3.3.2",
+    "valid-data-url": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "mocha": "^5.2.0",
-    "nock": "^11.0.0-beta.14"
+    "nock": "^10.0.6"
   }
 }

@@ -44,7 +44,7 @@ describe('# file workflow batch service batch API', () => {
         it('should return no persons found error for one of the images', () => {
 
             expect(out).to.deep.equal({
-                error: 'Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.',
+                error: 'Could not find person, product or car in image. For details and recommendations see https://www.remove.bg/supported-images.',
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 
@@ -370,7 +370,7 @@ describe('# file workflow batch service batch API', () => {
         it('should return no persons found error for one of the images', () => {
 
             expect(out).to.deep.equal({
-                error: 'Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.',
+                error: 'Could not find person, product or car in image. For details and recommendations see https://www.remove.bg/supported-images.',
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 
@@ -652,6 +652,10 @@ describe('# file workflow batch service batch API', () => {
         let done = [];
         let files = [];
 
+        function compare(a, b) {
+            return a.charged - b.charged;
+        }
+
         it('should return successfully processed images', async () => {
 
             await del([`${dir}/*.png`]);
@@ -691,7 +695,7 @@ describe('# file workflow batch service batch API', () => {
 
             expect(progress).to.be.an('array').to.have.lengthOf(6);
 
-            expect(done).to.deep.equal(progress);
+            expect(done.sort(compare)).to.deep.equal(progress.sort(compare));
 
         });
 

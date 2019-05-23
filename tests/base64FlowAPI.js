@@ -36,7 +36,7 @@ describe('# base64 workflow service API', () => {
             });
 
             expect(failedOutcome).to.deep.equal({
-                error: "Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.",
+                error: "Could not find person, product or car in image. For details and recommendations see https://www.remove.bg/supported-images.",
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 

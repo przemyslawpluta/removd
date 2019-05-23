@@ -54,7 +54,9 @@ async function urlWorkflow(options) {
     }
 
     const formData = {
-        image_url: url.href,
+        source: {
+            image_url: common.toStream(url.href)
+        },
         channels: 'rgba',
         bg_color: '00000000',
         format: 'auto',

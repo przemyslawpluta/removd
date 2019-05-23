@@ -28,7 +28,7 @@ describe('# file workflow service API', () => {
 
     context('with correct source and image without persons', () => {
 
-        it('should return no persons found error', async () => {
+        it('should return no persons, product or car found error', async () => {
 
             await del([`${dir}/*.png`]);
 
@@ -37,7 +37,7 @@ describe('# file workflow service API', () => {
             });
 
             expect(failedOutcome).to.deep.equal({
-                error: "Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.",
+                error: "Could not find person, product or car in image. For details and recommendations see https://www.remove.bg/supported-images.",
                 source: `${dir}/${testFile_LQ}-green.jpg`
             });
 

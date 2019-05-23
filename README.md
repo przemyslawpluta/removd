@@ -176,7 +176,7 @@ Response `(array)` will be similar to:
 ]
 ```
 
-To preserver image dimensions when image is larger then service limit of 10 megapixels enable `preserve` option:
+To preserve image dimensions when image is larger then service limit of 10 megapixels enable `preserve` option:
 
 ```js
 await removd.file({
@@ -525,12 +525,6 @@ To limit batch processing use **REMOVD_BATCH_LIMIT** (defaults to cpu count).
 
 ```batch
 REMOVD_BATCH_LIMIT=2
-```
-
-To control file check delay use **REMOVD_ISFILE_DELAY** (defaults to 200ms).
-
-```batch
-REMOVD_ISFILE_DELAY=50
 ```
 
 ## Tests

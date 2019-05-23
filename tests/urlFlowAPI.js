@@ -39,7 +39,7 @@ describe('# url workflow service API', () => {
             });
 
             expect(failedOutcome).to.deep.equal({
-                error: "Could not find person or product in image. For details and recommendations see https://www.remove.bg/supported-images.",
+                error: "Could not find person, product or car in image. For details and recommendations see https://www.remove.bg/supported-images.",
                 source: testFile_LQ_green
             });
 
@@ -123,7 +123,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a small image with person, size autodetected and alpha channels', () => {
+    context('with correct source and destination a small image with person, size autodetected and alpha channels and format set', () => {
 
         let outcome = {};
         let sourceFile = {};
@@ -132,6 +132,7 @@ describe('# url workflow service API', () => {
         it('should return object', async () => {
 
             outcome = await removd.url({
+                format: 'png',
                 channels: 'alpha',
                 destination: dir,
                 source: testFile_LQ
@@ -755,7 +756,7 @@ describe('# url workflow service API', () => {
 
     });
 
-    context('with correct source and destination a hd image with rgba background set and product autodetected', () => {
+    context('with correct source and destination a hd image filename bumped and rgba background set and product autodetected', () => {
 
         let outcome = {};
         let sourceFile = {};

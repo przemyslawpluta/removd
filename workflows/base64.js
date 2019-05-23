@@ -29,7 +29,9 @@ async function base64Workflow(options) {
     const b64ToImage = (options.toImage) ? true : false;
 
     const formData = {
-        image_file_b64: resource.file,
+        source: {
+            image_file_b64: resource.file
+        },
         size: resource.detail.size,
         channels: 'rgba',
         bg_color: '00000000',
