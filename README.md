@@ -25,7 +25,7 @@ Multiple examples can be located in [examples](https://github.com/przemyslawplut
 
 ## Usage
 
-Images can be processed using [file](https://github.com/przemyslawpluta/removd#removdfile), [url](https://github.com/przemyslawpluta/removd#removdurl) and [base64](https://github.com/przemyslawpluta/removd#removdbase64) workflows. Balance and subscription details can be retrieved using [account](https://github.com/przemyslawpluta/removd#account) workflow.
+Images can be processed using [file](https://github.com/przemyslawpluta/removd#removdfile), [url](https://github.com/przemyslawpluta/removd#removdurl) and [base64](https://github.com/przemyslawpluta/removd#removdbase64) workflows. Balance and subscription details can be retrieved using [account](https://github.com/przemyslawpluta/removd#removdaccount) workflow.
 
 ### removd.file
 
