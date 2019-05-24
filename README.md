@@ -1,7 +1,6 @@
 # removd
 
 [![NPM version](https://img.shields.io/npm/v/removd.svg)](https://npmjs.org/package/removd)
-[![Bundlephobia](https://badgen.net/bundlephobia/minzip/removd)](https://bundlephobia.com/result?p=removd)
 [![Downloads](https://img.shields.io/npm/dm/removd.svg)](https://npmjs.org/package/removd)
 [![CircleCI](https://img.shields.io/circleci/project/github/przemyslawpluta/removd/master.svg)](https://circleci.com/gh/przemyslawpluta/removd/tree/master)
 
