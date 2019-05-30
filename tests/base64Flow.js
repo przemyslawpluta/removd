@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const record = require('./record');
 const removd = require('../removd');
 
-const testFile_LQ = 'christopher-campbell-28567-unsplash-400x267';
+const testFile_LQ = 'default/christopher-campbell-28567-unsplash-400x267';
 const dir = path.resolve(__dirname, '../assets/');
 
 describe('# base64 workflow', () => {
@@ -153,7 +153,7 @@ describe('# base64 workflow', () => {
     context('with batch glob source but unsupported file format', () => {
         it('should return unsupported file format error', async () => {
 
-            const item1 = `${dir}/*.bmp`;
+            const item1 = `${dir}/default/*.bmp`;
 
             const done = await removd.base64({
                 glob: true,
@@ -164,7 +164,7 @@ describe('# base64 workflow', () => {
 
             expect(done).to.be.an('array').to.have.deep.members(([{
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-400x267.bmp`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-400x267.bmp`
             }]));
 
         });

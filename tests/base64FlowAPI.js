@@ -10,14 +10,14 @@ const common = require('../lib/common');
 const unlink = util.promisify(fs.unlink);
 
 const mainName = 'christopher-campbell-28567-unsplash';
-const testFile_LQ = `${mainName}-400x267`;
+const testFile_LQ = `default/${mainName}-400x267`;
 const testFileProduct_LQ = `product/ruslan-bardash-351288-unsplash-267x400`;
 const testFileCar_LQ = `car/hayes-potter-787785-unsplash-400x267`;
-const testFile_MQ = `${mainName}-1500x1000`;
+const testFile_MQ = `default/${mainName}-1500x1000`;
 const testFileProduct_MQ = `product/paul-gaudriault-661082-unsplash-1000x1458`;
 const testFileCar_HQ = `car/danny-larsen-409296-unsplash-2240x1600`;
-const testFile_HQ = `${mainName}-2400x1600`;
-const testFile_UHD = `${mainName}-3750x2500`;
+const testFile_HQ = `default/${mainName}-2400x1600`;
+const testFile_UHD = `default/${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, `../assets/`);
 
 describe('# base64 workflow service API', () => {
@@ -29,7 +29,7 @@ describe('# base64 workflow service API', () => {
 
         it('should return no persons found error', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             const failedOutcome = await removd.base64({
                 source: `${dir}/${testFile_LQ}-green.jpg`

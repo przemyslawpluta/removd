@@ -1,6 +1,6 @@
 {
   "name": "removd",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "automatic ai cut outs of people, products and cars with remove.bg service",
   "main": "removd.js",
   "scripts": {

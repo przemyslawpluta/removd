@@ -9,7 +9,7 @@ const common = require('../lib/common');
 const unlink = util.promisify(fs.unlink);
 
 const mainName = 'christopher-campbell-28567-unsplash';
-const testFile_5K = `${mainName}-5184x3456`;
+const testFile_5K = `ultrahd/${mainName}-5184x3456`;
 const dir = path.resolve(__dirname, `../assets/`);
 
 describe('# base64 preserve workflow service API', () => {
@@ -22,7 +22,7 @@ describe('# base64 preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}.txt`;
+        const testFile = `${dir}/${testFile_5K}.txt`;
 
         it('should return object', async () => {
 
@@ -121,7 +121,7 @@ describe('# base64 preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}.txt`;
+        const testFile = `${dir}/${testFile_5K}.txt`;
 
         it('should return object', async () => {
 
@@ -221,7 +221,7 @@ describe('# base64 preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}-url.txt`;
+        const testFile = `${dir}/${testFile_5K}-url.txt`;
 
         it('should return object', async () => {
 

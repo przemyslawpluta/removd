@@ -10,10 +10,10 @@ const record = require('./record');
 const unlink = util.promisify(fs.unlink);
 
 const mainName = 'christopher-campbell-28567-unsplash';
-const testFile_LQ = `${mainName}-400x267`;
-const testFile_MQ = `${mainName}-1500x1000`;
-const testFile_HQ = `${mainName}-2400x1600`;
-const testFile_UHD = `${mainName}-3750x2500`;
+const testFile_LQ = `default/${mainName}-400x267`;
+const testFile_MQ = `default/${mainName}-1500x1000`;
+const testFile_HQ = `default/${mainName}-2400x1600`;
+const testFile_UHD = `default/${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, `../assets/`);
 
 describe('# base64 workflow batch service API', () => {
@@ -31,7 +31,7 @@ describe('# base64 workflow batch service API', () => {
 
         it('should return no persons found error', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             done = await removd.base64({
                 source: [
@@ -109,7 +109,7 @@ describe('# base64 workflow batch service API', () => {
                 width: 1500,
                 height: 1000
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
         it('outcome should be small url encoded image and charged 1 credit', () => {
@@ -313,7 +313,7 @@ describe('# base64 workflow batch service API', () => {
 
         it('should return list of processed images', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             const batch = await removd.base64({
                 progress: true,
@@ -414,7 +414,7 @@ describe('# base64 workflow batch service API', () => {
                 width: 1500,
                 height: 1000
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
         it('outcome should be small url encoded image and charged 1 credit', () => {

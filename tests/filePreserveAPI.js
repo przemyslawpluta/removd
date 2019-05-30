@@ -7,7 +7,7 @@ const removd = require('../removd');
 const common = require('../lib/common');
 
 const mainName = 'christopher-campbell-28567-unsplash';
-const testFile_5K = `${mainName}-5184x3456`;
+const testFile_5K = `ultrahd/${mainName}-5184x3456`;
 const dir = path.resolve(__dirname, '../assets/');
 
 const unlink = util.promisify(fs.unlink);
@@ -23,7 +23,7 @@ describe('# file preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}.jpg`;
+        const testFile = `${dir}/${testFile_5K}.jpg`;
 
         it('should return object', async () => {
 
@@ -119,7 +119,7 @@ describe('# file preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}.jpg`;
+        const testFile = `${dir}/${testFile_5K}.jpg`;
 
         it('should return object', async () => {
 
@@ -216,7 +216,7 @@ describe('# file preserve workflow service API', () => {
         let outcome = {};
         let sourceFile = {};
         let destinationFile = {};
-        const testFile = `${dir}/ultrahd/${testFile_5K}.jpg`;
+        const testFile = `${dir}/${testFile_5K}.jpg`;
 
         it('should return object', async () => {
 

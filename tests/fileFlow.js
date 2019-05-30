@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const record = require('./record');
 const removd = require('../removd');
 
-const testFile_LQ = 'christopher-campbell-28567-unsplash-400x267';
+const testFile_LQ = 'default/christopher-campbell-28567-unsplash-400x267';
 const dir = path.resolve(__dirname, '../assets/');
 
 describe('# file workflow', () => {
@@ -158,8 +158,8 @@ describe('# file workflow', () => {
     context('with batch glob source but unsupported file format', () => {
         it('should return unsupported file format error', async () => {
 
-            const item1 = `${dir}/*.bmp`;
-            const item2 = `${dir}/*.txt`;
+            const item1 = `${dir}/default/*.bmp`;
+            const item2 = `${dir}/default/*.txt`;
 
             const done = await removd.file({
                 glob: true,
@@ -171,22 +171,22 @@ describe('# file workflow', () => {
 
             expect(done).to.be.an('array').to.have.deep.members(([{
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-400x267.bmp`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-400x267.bmp`
             }, {
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-400x267.txt`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-400x267.txt`
             }, {
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-2400x1600.txt`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-2400x1600.txt`
             }, {
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-3750x2500.txt`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-3750x2500.txt`
             }, {
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-400x267-url.txt`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-400x267-url.txt`
             }, {
                 error: "Unsupported file format",
-                source: `${dir}/christopher-campbell-28567-unsplash-1500x1000.txt`
+                source: `${dir}/default/christopher-campbell-28567-unsplash-1500x1000.txt`
             }]));
 
         });

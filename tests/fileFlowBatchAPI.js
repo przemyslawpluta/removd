@@ -6,10 +6,10 @@ const common = require('../lib/common');
 const removd = require('../removd');
 
 const mainName = 'christopher-campbell-28567-unsplash';
-const testFile_LQ = `${mainName}-400x267`;
-const testFile_MQ = `${mainName}-1500x1000`;
-const testFile_HQ = `${mainName}-2400x1600`;
-const testFile_UHD = `${mainName}-3750x2500`;
+const testFile_LQ = `default/${mainName}-400x267`;
+const testFile_MQ = `default/${mainName}-1500x1000`;
+const testFile_HQ = `default/${mainName}-2400x1600`;
+const testFile_UHD = `default/${mainName}-3750x2500`;
 const dir = path.resolve(__dirname, '../assets/');
 
 describe('# file workflow batch service batch API', () => {
@@ -26,7 +26,7 @@ describe('# file workflow batch service batch API', () => {
 
         it('should return an error and succesfull image', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             done = await removd.file({
                 source: [
@@ -101,7 +101,7 @@ describe('# file workflow batch service batch API', () => {
                 width: 400,
                 height: 267
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
     });
@@ -113,7 +113,7 @@ describe('# file workflow batch service batch API', () => {
 
         it('should return an error and succesfull image', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             done = await removd.file({
                 size: 'auto',
@@ -339,7 +339,7 @@ describe('# file workflow batch service batch API', () => {
                 width: 3750,
                 height: 2500
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
     });
@@ -352,12 +352,12 @@ describe('# file workflow batch service batch API', () => {
 
         it('should return an error and succesfull image', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             done = await removd.file({
                 glob: true,
                 source: [
-                    `${dir}/*.jpg`
+                    `${dir}/default/*.jpg`
                 ]
             });
 
@@ -639,7 +639,7 @@ describe('# file workflow batch service batch API', () => {
                 width: 3750,
                 height: 2500
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
     });
@@ -658,7 +658,7 @@ describe('# file workflow batch service batch API', () => {
 
         it('should return successfully processed images', async () => {
 
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
 
             const batch = await removd.file({
                 size: 'auto',
@@ -931,7 +931,7 @@ describe('# file workflow batch service batch API', () => {
                 width: 3750,
                 height: 2500
             });
-            await del([`${dir}/*.png`]);
+            await del([`${dir}/default/*.png`]);
         });
 
     });
