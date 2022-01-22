@@ -61,7 +61,7 @@
     "hex-rgb": "^4.1.0",
     "merge2": "^1.2.3",
     "mime": "^2.4.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "pretty-hrtime": "^1.0.3",
     "read-chunk": "^3.2.0",
     "rgb-hex": "^3.0.0",
