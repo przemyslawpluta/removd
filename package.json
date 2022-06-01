@@ -66,7 +66,7 @@
     "read-chunk": "^3.2.0",
     "rgb-hex": "^3.0.0",
     "round-to": "^4.0.0",
-    "sharp": "^0.22.1",
+    "sharp": "^0.30.5",
     "shortid": "^2.2.14",
     "strip-bom-stream": "^4.0.0",
     "uuid": "^3.3.2",
